@@ -193,9 +193,9 @@
 
                         <!-- Data Jamaah -->
                         <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Data Jamaah</h4>
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Data Peserta</h4>
                             <div class="mb-4">
-                                <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Jamaah</label>
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Peserta</label>
                                 <input type="number" id="input-pax-count" min="1" value="1" class="w-full md:w-1/3 px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" oninput="renderPilgrimFields(); calculateTotal();">
                             </div>
                             <div id="pilgrim-fields-container" class="space-y-4">
@@ -203,10 +203,10 @@
                             </div>
                         </div>
 
-                        <!-- Jadwal & Lokasi -->
+                        <!-- Jadwal -->
                         <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Jadwal & Lokasi</h4>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Jadwal Vaksin</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Tanggal (Min. H+7)</label>
                                     <input type="date" id="input-date" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
@@ -216,20 +216,24 @@
                                     <input type="time" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
                                 </div>
                             </div>
-                            <div class="space-y-3 border-t border-gray-100 pt-4">
-                                <p class="text-sm font-semibold text-gray-700">Titik Penjemputan / Lokasi Vaksin</p>
+                        </div>
+
+                        <!-- Lokasi Penjemputan -->
+                        <div id="card-location" class="bg-white p-6 rounded-xl shadow-soft border border-gray-100 hidden">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Lokasi Penjemputan</h4>
+                            <div class="space-y-3">
                                 <div>
                                     <label class="block text-xs font-medium text-gray-700 mb-1">Alamat Lengkap</label>
-                                    <textarea class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="2" required></textarea>
+                                    <textarea id="input-address" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="2"></textarea>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <label class="block text-xs font-medium text-gray-700 mb-1">Nama PIC</label>
-                                        <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                        <input type="text" id="input-pic-name" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
                                     </div>
                                     <div>
                                         <label class="block text-xs font-medium text-gray-700 mb-1">No. WA PIC</label>
-                                        <input type="tel" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                        <input type="tel" id="input-pic-wa" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
                                     </div>
                                 </div>
                             </div>
@@ -237,23 +241,10 @@
 
                         <!-- Pembayaran & Total -->
                         <div class="bg-white p-6 rounded-xl shadow-lg border border-gold/20">
-                            <h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan & Pembayaran</h4>
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="text-gray-600 text-sm">Total Harga (<span id="summary-pax">1</span> Jamaah)</span>
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan Pesanan</h4>
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-gray-600 text-sm">Total Harga (<span id="summary-pax">1</span> Peserta)</span>
                                 <span id="summary-total" class="text-2xl font-bold text-gold">Rp 0</span>
-                            </div>
-                            <div class="mb-6">
-                                <label class="block text-xs font-medium text-gray-700 mb-2">Metode Pembayaran</label>
-                                <div class="flex gap-4">
-                                    <label class="flex items-center gap-2 text-sm cursor-pointer p-3 border border-gray-200 rounded-lg w-full hover:bg-gray-50 has-[:checked]:border-gold has-[:checked]:bg-gold-50 transition-all">
-                                        <input type="radio" name="payment_method" value="online" class="text-gold focus:ring-gold" checked>
-                                        <span>Online Payment</span>
-                                    </label>
-                                    <label class="flex items-center gap-2 text-sm cursor-pointer p-3 border border-gray-200 rounded-lg w-full hover:bg-gray-50 has-[:checked]:border-gold has-[:checked]:bg-gold-50 transition-all">
-                                        <input type="radio" name="payment_method" value="ots" class="text-gold focus:ring-gold">
-                                        <span>On The Spot</span>
-                                    </label>
-                                </div>
                             </div>
                             <button type="submit" class="w-full bg-gold hover:bg-gold-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-gold/30 transition-all transform hover:-translate-y-0.5">
                                 Kirim Pemesanan
@@ -275,6 +266,21 @@
         document.getElementById('display-package-name').textContent = packageName;
         document.getElementById('display-package-price').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(packagePrice);
 
+        // Check for Antar-Jemput service
+        // Logic: Check if package name contains "Antar Jemput" or "Home Service"
+        const hasAntarJemput = packageName.toLowerCase().includes('antar jemput') || packageName.toLowerCase().includes('home service') || packageName.toLowerCase().includes('antar-jemput');
+        
+        const locationCard = document.getElementById('card-location');
+        const locationInputs = locationCard.querySelectorAll('input, textarea');
+
+        if (hasAntarJemput) {
+            locationCard.classList.remove('hidden');
+            locationInputs.forEach(input => input.setAttribute('required', ''));
+        } else {
+            locationCard.classList.add('hidden');
+            locationInputs.forEach(input => input.removeAttribute('required'));
+        }
+
         // Set Min Date (Today + 7 days)
         const today = new Date();
         today.setDate(today.getDate() + 7);
@@ -289,7 +295,7 @@
             for (let i = 1; i <= count; i++) {
                 const html = `
                     <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 animate-fade-in">
-                        <p class="text-xs font-bold text-gray-500 uppercase mb-3">Data Jamaah #${i}</p>
+                        <p class="text-xs font-bold text-gray-500 uppercase mb-3">Data Peserta #${i}</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div><input type="text" placeholder="Nama Lengkap" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
                             <div><input type="tel" placeholder="No. WhatsApp" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
