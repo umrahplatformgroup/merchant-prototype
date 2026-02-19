@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Handling Service - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Handling Service</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Handling Service</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="handling-paket.html" class="hover:text-gold">Paket</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Order</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex items-center gap-4">
+                    <a href="handling-paket.html" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h3 class="text-xl font-bold text-gray-800">Formulir Pemesanan Paket</h3>
+                </div>
+                
+                <div class="w-full">
+                    <div id="form-container" class="bg-white rounded-xl shadow-soft p-8 border border-gray-100 min-h-[400px] flex items-center justify-center text-gray-400">
+                        <div class="text-center">
+                            <i class="fas fa-circle-notch fa-spin text-4xl mb-3 text-gold opacity-50"></i>
+                            <p>Memuat formulir...</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Global State
+        let currentCurrency = 'USD';
+        const currencyRates = { 'USD': 1, 'IDR': 15625, 'SAR': 3.75 };
+        
+        // Data Paket dengan Tiering
+        const packagesData = {
+            'la_b3_10m': {
+                name: 'Paket Bintang 3, 10 Malam',
+                basePrice: 925,
+                tiers: [{min: 1, max: 19, price: 975}, {min: 20, max: 40, price: 925}, {min: 41, max: 60, price: 905}, {min: 61, max: 9999, price: 885}]
+            },
+            'la_b4_7m': {
+                name: 'Paket Bintang 4, 7 Malam',
+                basePrice: 523,
+                tiers: [{min: 1, max: 19, price: 573}, {min: 20, max: 40, price: 523}, {min: 41, max: 60, price: 503}, {min: 61, max: 9999, price: 483}]
+            },
+            'la_b5_10m_fb': {
+                name: 'Paket Bintang 5, 10 Malam Fullboard',
+                basePrice: 1324,
+                tiers: [{min: 1, max: 19, price: 1374}, {min: 20, max: 40, price: 1324}, {min: 41, max: 60, price: 1304}, {min: 61, max: 9999, price: 1284}]
+            },
+            'la_b4_5m_bb': {
+                name: 'Paket Bintang 4, 5 Malam + Breakfast',
+                basePrice: 650,
+                tiers: [{min: 1, max: 19, price: 700}, {min: 20, max: 40, price: 650}, {min: 41, max: 60, price: 630}, {min: 61, max: 9999, price: 610}]
+            },
+            'la_b5_7m': {
+                name: 'Paket Bintang 5, 7 Malam',
+                basePrice: 1100,
+                tiers: [{min: 1, max: 19, price: 1150}, {min: 20, max: 40, price: 1100}, {min: 41, max: 60, price: 1080}, {min: 61, max: 9999, price: 1060}]
+            },
+            'handling_only': { // Legacy support if needed, or remove
+                name: 'Paket Handling Only',
+                basePrice: 55,
+                tiers: [{min: 1, max: 9999, price: 55}]
+            }
+        };
+        
+        let currentPackageId = null;
+
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function updateForm(packageType) {
+            const container = document.getElementById('form-container');
+            currentPackageId = packageType;
+            
+            // Cek apakah paket ada di data packagesData (Paket Spesifik)
+            if (packagesData[packageType]) {
+                const pkg = packagesData[packageType];
+                container.innerHTML = `
+                    <form id="form-specific-package" class="space-y-6 animate-fade-in text-left">
+                        <h4 class="text-lg font-bold text-gray-800 border-b border-gray-100 pb-2">Formulir Pemesanan: ${pkg.name}</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">1. Kamar dan Jumlah Jamaah</h5><div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">${renderRoomInput('Quad', 4)}${renderRoomInput('Triple', 3)}${renderRoomInput('Double', 2)}${renderRoomInput('Single', 1)}</div><div class="flex justify-between items-center bg-white p-3 rounded border border-gray-200"><span class="text-sm font-medium text-gray-700">Total Jamaah</span><span id="total-pilgrims" class="font-bold text-gold text-lg">0</span></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">2. Harga Paket</h5><div class="flex justify-between items-center bg-white p-4 rounded-lg border border-gray-200"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold"><i class="fas fa-tag"></i></div><div><p class="text-sm font-medium text-gray-800">Harga per Pax</p><p class="text-xs text-gray-500">Menyesuaikan jumlah jamaah</p></div></div><span id="dynamic-package-price" class="text-xl font-bold text-gold">$${pkg.basePrice}</span></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">3. Setting Hotel</h5><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${renderHotelInput(1)}${renderHotelInput(2)}</div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">4. Detail Penerbangan</h5><div class="flex gap-4 mb-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="yes" class="text-gold focus:ring-gold" onchange="toggleFlightDetails(true)"><span>Sudah ada Tiket</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="no" class="text-gold focus:ring-gold" checked onchange="toggleFlightDetails(false)"><span>Belum ada Tiket</span></label></div><div id="flight-details" class="hidden space-y-4 border-t border-gray-200 pt-4"><div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Keberangkatan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div><div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Kepulangan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">5. Muthowwif</h5><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><p class="text-xs text-gray-500 mb-2">Jenis Kelamin</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="male" class="text-gold focus:ring-gold"><span>Laki-laki</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="female" class="text-gold focus:ring-gold"><span>Perempuan</span></label></div></div><div><p class="text-xs text-gray-500 mb-2">Bahasa</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="id" class="text-gold focus:ring-gold"><span>Indonesia</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="ar" class="text-gold focus:ring-gold"><span>Arab</span></label></div></div></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">6. Tambahan (Optional)</h5><div class="space-y-2">${renderAddon('Makan Al Baik', 2, 'pax')}${renderAddon('Tour Thoif', 380, 'group')}${renderAddon('Kereta Gantung', 20, 'pax')}${renderAddon('Kereta Cepat Madinah-Makkah', 55, 'pax')}</div></div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-gold/20"><h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan Pesanan</h4><div class="space-y-2 text-sm mb-6"><div class="flex justify-between"><span class="text-gray-500">Paket Dipilih</span><span class="font-medium text-gray-800" id="summary-package">-</span></div><div class="flex justify-between"><span class="text-gray-500">Total Jamaah</span><span class="font-medium text-gray-800" id="summary-pilgrims">0</span></div><div class="flex justify-between items-center pt-2 border-t border-gray-100 mt-2"><span class="text-gray-800 font-semibold">Total Harga Paket</span><span class="text-xl font-bold text-gold" id="summary-total">$0</span></div></div><div class="flex justify-end gap-2 mb-6"><button type="button" onclick="setFormCurrency('IDR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="IDR">IDR</button><button type="button" onclick="setFormCurrency('USD')" class="px-3 py-1 text-xs rounded bg-gold text-white border border-gold form-currency-btn transition-colors" data-currency="USD">USD</button><button type="button" onclick="setFormCurrency('SAR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="SAR">SAR</button></div><button type="button" class="w-full bg-gold hover:bg-gold-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-gold/30 transition-all transform hover:-translate-y-0.5">Kirim Pesanan</button></div>
+                    </form>
+                `;
+            } else if (packageType === 'handling_visa') { // Handling Only is now likely covered by specific packages or custom, keeping this for legacy/visa only
+                const isVisa = packageType === 'handling_visa';
+                const title = isVisa ? 'Formulir Paket Handling + Visa' : 'Formulir Paket Handling Only';
+                const step2Title = isVisa ? '2. Pilih Paket Handling + Visa' : '2. Pilih Paket Handling Only';
+
+                container.innerHTML = `
+                    <form id="form-handling" class="space-y-6 animate-fade-in text-left">
+                        <h4 class="text-lg font-bold text-gray-800 border-b border-gray-100 pb-2">${title}</h4>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">1. Kamar dan Jumlah Jamaah</h5><div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">${renderRoomInput('Quad', 4)}${renderRoomInput('Triple', 3)}${renderRoomInput('Double', 2)}${renderRoomInput('Single', 1)}</div><div class="flex justify-between items-center bg-white p-3 rounded border border-gray-200"><span class="text-sm font-medium text-gray-700">Total Jamaah</span><span id="total-pilgrims" class="font-bold text-gold text-lg">0</span></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">${step2Title}</h5><div class="space-y-2">${renderPackageOption('Basic', 55)}${renderPackageOption('Premium', 100)}${renderPackageOption('VIP', 142)}</div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">3. Setting Hotel</h5><div class="flex gap-4 mb-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="hotel_status" value="yes" class="text-gold focus:ring-gold" onchange="toggleHotelDetails(true)"><span>Sudah Pesan Hotel</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="hotel_status" value="no" class="text-gold focus:ring-gold" checked onchange="toggleHotelDetails(false)"><span>Belum Pesan Hotel</span></label></div><div id="hotel-details" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-200 pt-4">${renderHotelInput(1)}${renderHotelInput(2)}</div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">4. Detail Penerbangan</h5><div class="flex gap-4 mb-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="yes" class="text-gold focus:ring-gold" onchange="toggleFlightDetails(true)"><span>Sudah ada Tiket</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="no" class="text-gold focus:ring-gold" checked onchange="toggleFlightDetails(false)"><span>Belum ada Tiket</span></label></div><div id="flight-details" class="hidden space-y-4 border-t border-gray-200 pt-4"><div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Keberangkatan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div><div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Kepulangan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">5. Muthowwif</h5><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><p class="text-xs text-gray-500 mb-2">Jenis Kelamin</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="male" class="text-gold focus:ring-gold"><span>Laki-laki</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="female" class="text-gold focus:ring-gold"><span>Perempuan</span></label></div></div><div><p class="text-xs text-gray-500 mb-2">Bahasa</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="id" class="text-gold focus:ring-gold"><span>Indonesia</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="ar" class="text-gold focus:ring-gold"><span>Arab</span></label></div></div></div></div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">6. Tambahan (Optional)</h5><div class="space-y-2">${renderAddon('Makan Al Baik', 2, 'pax')}${renderAddon('Tour Thoif', 380, 'group')}${renderAddon('Kereta Gantung', 20, 'pax')}${renderAddon('Kereta Cepat Madinah-Makkah', 55, 'pax')}</div></div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-gold/20"><h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan Pesanan</h4><div class="space-y-2 text-sm mb-6"><div class="flex justify-between"><span class="text-gray-500">Paket Dipilih</span><span class="font-medium text-gray-800" id="summary-package">-</span></div><div class="flex justify-between"><span class="text-gray-500">Total Jamaah</span><span class="font-medium text-gray-800" id="summary-pilgrims">0</span></div><div class="flex justify-between items-center pt-2 border-t border-gray-100 mt-2"><span class="text-gray-800 font-semibold">Total Harga Paket</span><span class="text-xl font-bold text-gold" id="summary-total">$0</span></div></div><div class="flex justify-end gap-2 mb-6"><button type="button" onclick="setFormCurrency('IDR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="IDR">IDR</button><button type="button" onclick="setFormCurrency('USD')" class="px-3 py-1 text-xs rounded bg-gold text-white border border-gold form-currency-btn transition-colors" data-currency="USD">USD</button><button type="button" onclick="setFormCurrency('SAR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="SAR">SAR</button></div><button type="button" class="w-full bg-gold hover:bg-gold-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-gold/30 transition-all transform hover:-translate-y-0.5">Kirim Pesanan</button></div>
+                    </form>
+                `;
+            } else if (packageType === 'custom') {
+                container.innerHTML = `
+                    <form id="form-custom" class="space-y-6 animate-fade-in text-left">
+                        <h4 class="text-lg font-bold text-gray-800 border-b border-gray-100 pb-2">Formulir Pemesanan Paket Custom</h4>
+                        
+                        <!-- 1. Kamar & Jamaah -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 class="font-semibold text-gray-700 mb-3 text-sm">1. Kamar dan Jumlah Jamaah</h5>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">${renderRoomInput('Quad', 4)}${renderRoomInput('Triple', 3)}${renderRoomInput('Double', 2)}${renderRoomInput('Single', 1)}</div>
+                            <div class="flex justify-between items-center bg-white p-3 rounded border border-gray-200"><span class="text-sm font-medium text-gray-700">Total Jamaah</span><span id="total-pilgrims" class="font-bold text-gold text-lg">0</span></div>
+                        </div>
+
+                        <!-- 2. Airport Handling -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 class="font-semibold text-gray-700 mb-3 text-sm">2. Airport Handling</h5>
+                            <div class="grid grid-cols-3 gap-2 mb-4">${renderCustomServiceRadio('airport_handling', 'Basic', 20)}${renderCustomServiceRadio('airport_handling', 'Premium', 30)}${renderCustomServiceRadio('airport_handling', 'VIP', 40)}</div>
+                            <div class="border-t border-gray-200 pt-4"><div class="flex gap-4 mb-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="yes" class="text-gold focus:ring-gold" onchange="toggleFlightDetails(true)"> <span>Sudah ada Tiket</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="flight_status" value="no" class="text-gold focus:ring-gold" checked onchange="toggleFlightDetails(false)"> <span>Belum ada Tiket</span></label></div><div id="flight-details" class="hidden space-y-4">${renderFlightInputs()}</div></div>
+                        </div>
+
+                        <!-- 3. Hotel Handling -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h5 class="font-semibold text-gray-700 mb-3 text-sm">3. Hotel Handling</h5>
+                            <div class="grid grid-cols-3 gap-2 mb-4">${renderCustomServiceRadio('hotel_handling', 'Basic', 20)}${renderCustomServiceRadio('hotel_handling', 'Premium', 30)}${renderCustomServiceRadio('hotel_handling', 'VIP', 40)}</div>
+                            <div class="border-t border-gray-200 pt-4"><div class="flex gap-4 mb-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="hotel_status" value="yes" class="text-gold focus:ring-gold" onchange="toggleHotelDetails(true)"> <span>Sudah Pesan Hotel</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="hotel_status" value="no" class="text-gold focus:ring-gold" checked onchange="toggleHotelDetails(false)"> <span>Belum Pesan Hotel</span></label></div><div id="hotel-details" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">${renderHotelInput(1)}${renderHotelInput(2)}</div></div>
+                        </div>
+
+                        <!-- 4. Muthowwif -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
+                            <h5 class="font-semibold text-gray-700 text-sm">4. Muthowwif</h5>
+                            ${renderMuthowwifSection('umroh', 'Muthowwif Umroh', 'hari', {Basic: 20, Premium: 30, VIP: 40})}
+                            ${renderMuthowwifSection('rawdha', 'Muthowwif Rawdha', 'pax', {Basic: 40, Premium: 50, VIP: 60})}
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-gray-200 pt-4"><div><p class="text-xs text-gray-500 mb-2">Jenis Kelamin</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="male" class="text-gold focus:ring-gold"><span>Laki-laki</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_gender" value="female" class="text-gold focus:ring-gold"><span>Perempuan</span></label></div></div><div><p class="text-xs text-gray-500 mb-2">Bahasa</p><div class="flex gap-4"><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="id" class="text-gold focus:ring-gold"><span>Indonesia</span></label><label class="flex items-center gap-2 text-sm cursor-pointer"><input type="radio" name="muthowwif_lang" value="ar" class="text-gold focus:ring-gold"><span>Arab</span></label></div></div></div>
+                        </div>
+
+                        <!-- 5. City Tour -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-4">
+                            <h5 class="font-semibold text-gray-700 text-sm">5. City Tour</h5>
+                            ${renderCityTourSection('thoif', 'Tour Thoif', {Basic: 380, Premium: 400, VIP: 450})}
+                            ${renderCityTourSection('madinah', 'Tour Madinah', {Basic: 380, Premium: 400, VIP: 450})}
+                        </div>
+
+                        <!-- 6. Tambahan -->
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200"><h5 class="font-semibold text-gray-700 mb-3 text-sm">6. Tambahan (Optional)</h5><div class="space-y-2">${renderAddon('Makan Al Baik', 2, 'pax')}${renderAddon('Kereta Gantung', 20, 'pax')}${renderAddon('Kereta Cepat Madinah-Makkah', 55, 'pax')}</div></div>
+                        
+                        <!-- Ringkasan -->
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-gold/20"><h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan Pesanan</h4><div class="space-y-2 text-sm mb-6"><div class="flex justify-between"><span class="text-gray-500">Paket Dipilih</span><span class="font-medium text-gray-800" id="summary-package">Paket Custom</span></div><div class="flex justify-between"><span class="text-gray-500">Total Jamaah</span><span class="font-medium text-gray-800" id="summary-pilgrims">0</span></div><div class="flex justify-between items-center pt-2 border-t border-gray-100 mt-2"><span class="text-gray-800 font-semibold">Total Harga Paket</span><span class="text-xl font-bold text-gold" id="summary-total">$0</span></div></div><div class="flex justify-end gap-2 mb-6"><button type="button" onclick="setFormCurrency('IDR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="IDR">IDR</button><button type="button" onclick="setFormCurrency('USD')" class="px-3 py-1 text-xs rounded bg-gold text-white border border-gold form-currency-btn transition-colors" data-currency="USD">USD</button><button type="button" onclick="setFormCurrency('SAR')" class="px-3 py-1 text-xs rounded border border-gray-200 hover:bg-gray-50 form-currency-btn transition-colors" data-currency="SAR">SAR</button></div><button type="button" class="w-full bg-gold hover:bg-gold-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-gold/30 transition-all transform hover:-translate-y-0.5">Kirim Pesanan</button></div>
+                    </form>
+                `;
+            }
+        }
+
+        // Helper Render Functions
+        function renderPackageOption(name, price) {
+            return `<label class="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg cursor-pointer hover:border-gold transition-colors group"><div class="flex items-center gap-3"><input type="radio" name="package_option" value="${price}" data-name="${name}" class="text-gold focus:ring-gold" onchange="calculateTotal()"><div><p class="font-medium text-gray-800 text-sm">${name}</p></div></div><span class="font-bold text-gold text-sm">$${price}<span class="text-[10px] text-gray-500 font-normal">/pax</span></span></label>`;
+        }
+        function renderHotelInput(num) {
+            return `<div class="space-y-2"><p class="text-xs font-medium text-gray-500 uppercase">Hotel ${num}</p><input type="text" placeholder="Nama Hotel" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Kota" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><div class="grid grid-cols-2 gap-2"><input type="date" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" placeholder="Check-in"><input type="number" placeholder="Malam" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div><input type="date" class="w-full px-3 py-2 rounded border border-gray-300 text-sm bg-gray-50" placeholder="Check-out" readonly></div>`;
+        }
+        function renderRoomInput(type, multiplier) {
+            return `<div><label class="block text-xs text-gray-500 mb-1">${type} (x${multiplier})</label><input type="number" id="room-${type.toLowerCase()}" value="0" min="0" data-multiplier="${multiplier}" class="w-full px-3 py-2 rounded border border-gray-300 text-sm room-input focus:border-gold outline-none" oninput="calculatePilgrims()"></div>`;
+        }
+        function renderAddon(name, price, type) {
+            return `<label class="flex items-center justify-between text-sm cursor-pointer p-2 hover:bg-gray-50 rounded transition-colors"><div class="flex items-center gap-2"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300 addon-checkbox" value="${price}" data-type="${type}" onchange="calculateTotal()"><span class="text-gray-700">${name}</span></div><span class="text-gray-500 text-xs">$${price}/${type}</span></label>`;
+        }
+        function renderFlightInputs() {
+            return `<div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Keberangkatan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div><div><p class="text-xs font-bold text-gray-500 uppercase mb-2">Kepulangan</p><div class="grid grid-cols-1 md:grid-cols-3 gap-3"><input type="date" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="Maskapai" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"><input type="text" placeholder="No. Penerbangan" class="px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none"></div></div>`;
+        }
+        function renderCustomServiceRadio(name, level, price) {
+            return `<label class="p-2 text-center rounded-lg border border-gray-200 bg-white cursor-pointer has-[:checked]:bg-gold-50 has-[:checked]:border-gold transition-colors"><input type="radio" name="${name}" value="${price}" class="sr-only" onchange="calculateTotal()"><span class="text-sm font-semibold text-gray-700">${level}</span><span class="block text-xs text-gray-500">$${price}/pax</span></label>`;
+        }
+        function renderMuthowwifSection(id, title, priceType, options) {
+            return `<div class="border-t border-gray-200 pt-4"><h6 class="font-semibold text-gray-700 mb-2 text-sm">${title}</h6><div class="flex items-center gap-3 mb-3"><input type="number" id="muthowwif-${id}-pax" placeholder="Jml Pax" class="w-24 px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" oninput="calculateTotal()">${priceType === 'hari' ? `<input type="number" id="muthowwif-${id}-days" placeholder="Jml Hari" class="w-24 px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" oninput="calculateTotal()">` : ''}</div><div class="grid grid-cols-3 gap-2">${Object.entries(options).map(([level, price]) => `<label class="p-2 text-center rounded-lg border border-gray-200 bg-white cursor-pointer has-[:checked]:bg-gold-50 has-[:checked]:border-gold transition-colors"><input type="radio" name="muthowwif_${id}" value="${price}" class="sr-only" onchange="calculateTotal()"><span class="text-sm font-semibold text-gray-700">${level}</span><span class="block text-xs text-gray-500">$${price}/${priceType}</span></label>`).join('')}</div></div>`;
+        }
+        function renderCityTourSection(id, title, prices) {
+            return `<div class="border-t border-gray-200 pt-4"><label class="flex items-center gap-3 mb-3"><input type="checkbox" id="tour-${id}-check" class="rounded text-gold focus:ring-gold" onchange="calculateTotal()"> <span class="font-semibold text-gray-700 text-sm">${title}</span></label><div class="grid grid-cols-3 gap-2">${Object.entries(prices).map(([level, price]) => `<label class="p-2 text-center rounded-lg border border-gray-200 bg-white cursor-pointer has-[:checked]:bg-gold-50 has-[:checked]:border-gold transition-colors"><input type="radio" name="tour_${id}" value="${price}" class="sr-only" onchange="calculateTotal()"><span class="text-sm font-semibold text-gray-700">${level}</span><span class="block text-xs text-gray-500">$${price}/group</span></label>`).join('')}</div></div>`;
+        }
+
+        // Logic Functions
+        function toggleFlightDetails(show) {
+            const details = document.getElementById('flight-details');
+            if (show) details.classList.remove('hidden');
+            else details.classList.add('hidden');
+        }
+        function toggleHotelDetails(show) {
+            const details = document.getElementById('hotel-details');
+            if (show) details.classList.remove('hidden');
+            else details.classList.add('hidden');
+        }
+        function calculatePilgrims() {
+            let total = 0;
+            document.querySelectorAll('.room-input').forEach(input => {
+                const count = parseInt(input.value) || 0;
+                const multiplier = parseInt(input.dataset.multiplier) || 1;
+                total += count * multiplier;
+            });
+            document.getElementById('total-pilgrims').textContent = total;
+            document.getElementById('summary-pilgrims').textContent = total;
+            calculateTotal();
+        }
+        function calculateTotal() {
+            let totalUSD = 0;
+            const totalPilgrims = parseInt(document.getElementById('total-pilgrims').textContent) || 0;
+            
+            if (document.getElementById('form-custom')) {
+                // Custom Form Calculation
+                document.getElementById('summary-package').textContent = 'Paket Custom';
+                
+                const airportHandling = document.querySelector('input[name="airport_handling"]:checked');
+                if (airportHandling) totalUSD += parseFloat(airportHandling.value) * totalPilgrims;
+
+                const hotelHandling = document.querySelector('input[name="hotel_handling"]:checked');
+                if (hotelHandling) totalUSD += parseFloat(hotelHandling.value) * totalPilgrims;
+
+                const muthUmroh = document.querySelector('input[name="muthowwif_umroh"]:checked');
+                if (muthUmroh) {
+                    const pax = parseInt(document.getElementById('muthowwif-umroh-pax').value) || 0;
+                    const days = parseInt(document.getElementById('muthowwif-umroh-days').value) || 0;
+                    totalUSD += parseFloat(muthUmroh.value) * pax * days;
+                }
+                const muthRawdha = document.querySelector('input[name="muthowwif_rawdha"]:checked');
+                if (muthRawdha) {
+                    const pax = parseInt(document.getElementById('muthowwif-rawdha-pax').value) || 0;
+                    totalUSD += parseFloat(muthRawdha.value) * pax;
+                }
+                if (document.getElementById('tour-thoif-check')?.checked) {
+                    const tour = document.querySelector('input[name="tour_thoif"]:checked');
+                    if (tour) totalUSD += parseFloat(tour.value);
+                }
+                if (document.getElementById('tour-madinah-check')?.checked) {
+                    const tour = document.querySelector('input[name="tour_madinah"]:checked');
+                    if (tour) totalUSD += parseFloat(tour.value);
+                }
+            } else if (packagesData[currentPackageId]) {
+                // Specific Package Calculation with Tiering
+                const pkg = packagesData[currentPackageId];
+                document.getElementById('summary-package').textContent = pkg.name;
+                
+                // Determine Price based on Tiering
+                let pricePerPax = pkg.basePrice;
+                for (const tier of pkg.tiers) {
+                    if (totalPilgrims >= tier.min && totalPilgrims <= tier.max) {
+                        pricePerPax = tier.price;
+                        break;
+                    }
+                }
+                
+                // Update displayed price per pax in form
+                const priceDisplay = document.getElementById('dynamic-package-price');
+                if(priceDisplay) priceDisplay.textContent = `$${pricePerPax}`;
+
+                totalUSD = pricePerPax * totalPilgrims;
+            }
+
+            // Addons (Common for both)
+            document.querySelectorAll('.addon-checkbox:checked').forEach(addon => {
+                const price = parseFloat(addon.value);
+                const type = addon.dataset.type;
+                if (type === 'pax') { totalUSD += price * totalPilgrims; } else { totalUSD += price; }
+            });
+            
+            displayTotal(totalUSD);
+        }
+        function displayTotal(amountUSD) {
+            const rate = currencyRates[currentCurrency];
+            const converted = amountUSD * rate;
+            const locale = currentCurrency === 'IDR' ? 'id-ID' : (currentCurrency === 'USD' ? 'en-US' : 'en-SA');
+            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currentCurrency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            document.getElementById('summary-total').textContent = formatter.format(converted);
+            document.getElementById('summary-total').dataset.usd = amountUSD;
+        }
+        function setFormCurrency(currency) {
+            currentCurrency = currency;
+            document.querySelectorAll('.form-currency-btn').forEach(btn => {
+                if(btn.dataset.currency === currency) {
+                    btn.classList.add('bg-gold', 'text-white', 'border-gold');
+                    btn.classList.remove('border-gray-200', 'hover:bg-gray-50', 'text-gray-700');
+                } else {
+                    btn.classList.remove('bg-gold', 'text-white', 'border-gold');
+                    btn.classList.add('border-gray-200', 'hover:bg-gray-50', 'text-gray-700');
+                }
+            });
+            const totalUSD = parseFloat(document.getElementById('summary-total').dataset.usd) || 0;
+            displayTotal(totalUSD);
+        }
+
+        // Auto-select package from URL
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pkg = urlParams.get('package');
+            if(pkg) {
+                updateForm(pkg);
+            } else {
+                // Fallback jika tidak ada parameter paket
+                document.getElementById('form-container').innerHTML = '<div class="text-center"><i class="fas fa-exclamation-circle text-4xl mb-3 text-red-400 opacity-50"></i><p>Paket tidak ditemukan. Silakan pilih paket dari halaman sebelumnya.</p><a href="handling-paket.html" class="inline-block mt-4 text-gold hover:underline">Kembali ke Daftar Paket</a></div>';
+            }
+        });
+    </script>
+</body>
+</html>

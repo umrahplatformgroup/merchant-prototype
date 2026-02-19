@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('ticketing')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Ticketing</span>
+                                </div>
+                                <i id="arrow-ticketing" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-ticketing" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="#" onclick="switchView('kunjungan')" id="link-kunjungan" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Kunjungan</a>
+                                <a href="#" onclick="switchView('event')" id="link-event" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Event</a>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Ticketing</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold" id="breadcrumb-active">Event</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <!-- VIEW: EVENT -->
+                <div id="view-event">
+                    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <h3 class="text-xl font-bold text-gray-800">Daftar Event</h3>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <div class="relative w-full md:w-64">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="search-input-event" onkeyup="filterTable('event')" placeholder="Cari event..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                            </div>
+                            <button onclick="openModal('modal-add-event')" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20 whitespace-nowrap">
+                                <i class="fas fa-plus"></i> Tambah Event
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">Nama Event</th>
+                                        <th class="p-4 font-semibold">Merchant</th>
+                                        <th class="p-4 font-semibold">Tanggal</th>
+                                        <th class="p-4 font-semibold">Sesi</th>
+                                        <th class="p-4 font-semibold">Waktu</th>
+                                        <th class="p-4 font-semibold">Harga</th>
+                                        <th class="p-4 font-semibold">Kuota</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body-event" class="text-sm divide-y divide-gray-100">
+                                    <!-- Dummy 1 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-medium text-gray-800">Manasik Akbar 2026</td>
+                                        <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                        <td class="p-4 text-gray-600">25 Feb 2026</td>
+                                        <td class="p-4 text-gray-600">Pagi</td>
+                                        <td class="p-4 text-gray-600">08:00 - 12:00</td>
+                                        <td class="p-4 font-medium text-gold">Rp 150.000</td>
+                                        <td class="p-4 text-gray-600">78/150</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal('Manasik Akbar 2026', 'Al-Hijaz Indowisata', '25 Feb 2026', '08:00 - 12:00', '150000', 'Kegiatan manasik akbar untuk persiapan umroh musim 2026.')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openOrderModal('Manasik Akbar 2026', 150000)" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="ticketing-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block"><i class="fas fa-history"></i></a>
+                                        </td>
+                                    </tr>
+                                    <!-- Dummy 2 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-medium text-gray-800">Kajian Fiqih Umroh</td>
+                                        <td class="p-4 text-gray-600">Barokah Travel</td>
+                                        <td class="p-4 text-gray-600">28 Feb 2026</td>
+                                        <td class="p-4 text-gray-600">Sore</td>
+                                        <td class="p-4 text-gray-600">15:30 - 17:00</td>
+                                        <td class="p-4 font-medium text-gold">Rp 50.000</td>
+                                        <td class="p-4 text-gray-600">21/50</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal('Kajian Fiqih Umroh', 'Barokah Travel', '28 Feb 2026', '15:30 - 17:00', '50000', 'Kajian mendalam tentang fiqih umroh sesuai sunnah.')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openOrderModal('Kajian Fiqih Umroh', 50000)" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="ticketing-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block"><i class="fas fa-history"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: KUNJUNGAN -->
+                <div id="view-kunjungan" class="hidden">
+                    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <h3 class="text-xl font-bold text-gray-800">Daftar Kunjungan</h3>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <div class="relative w-full md:w-64">
+                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                                <input type="text" id="search-input-kunjungan" onkeyup="filterTable('kunjungan')" placeholder="Cari kunjungan..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                            </div>
+                            <button onclick="openModal('modal-add-event')" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20 whitespace-nowrap">
+                                <i class="fas fa-plus"></i> Tambah Kunjungan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">Nama Kunjungan</th>
+                                        <th class="p-4 font-semibold">Merchant</th>
+                                        <th class="p-4 font-semibold">Hari</th>
+                                        <th class="p-4 font-semibold">Sesi</th>
+                                        <th class="p-4 font-semibold">Waktu</th>
+                                        <th class="p-4 font-semibold">Harga</th>
+                                        <th class="p-4 font-semibold">Kuota</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body-kunjungan" class="text-sm divide-y divide-gray-100">
+                                    <!-- Dummy 1 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-medium text-gray-800">Museum Al-Wahyu</td>
+                                        <td class="p-4 text-gray-600">Jabal Nur Tour</td>
+                                        <td class="p-4 text-gray-600">Senin - Jum'at</td>
+                                        <td class="p-4 text-gray-600">Pagi</td>
+                                        <td class="p-4 text-gray-600">09:00 - 11:00</td>
+                                        <td class="p-4 font-medium text-gold">Rp 75.000</td>
+                                        <td class="p-4 text-gray-600">50/100</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal('Museum Al-Wahyu', 'Jabal Nur Tour', 'Senin - Jum\'at', '09:00 - 11:00', '75000', 'Kunjungan edukasi ke Museum Al-Wahyu di kaki Jabal Nur.')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openOrderModal('Museum Al-Wahyu', 75000)" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="ticketing-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block"><i class="fas fa-history"></i></a>
+                                        </td>
+                                    </tr>
+                                    <!-- Dummy 2 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-medium text-gray-800">Kebun Kurma Madinah</td>
+                                        <td class="p-4 text-gray-600">Madinah Dates</td>
+                                        <td class="p-4 text-gray-600">Senin, Rabu, Sabtu</td>
+                                        <td class="p-4 text-gray-600">Sore</td>
+                                        <td class="p-4 text-gray-600">16:00 - 18:00</td>
+                                        <td class="p-4 font-medium text-gold">Rp 30.000</td>
+                                        <td class="p-4 text-gray-600">Unlimited</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal('Kebun Kurma Madinah', 'Madinah Dates', 'Senin, Rabu, Sabtu', '16:00 - 18:00', '30000', 'Wisata petik kurma dan edukasi jenis-jenis kurma di Madinah.')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openOrderModal('Kebun Kurma Madinah', 30000)" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="ticketing-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block"><i class="fas fa-history"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Order Summary -->
+    <div id="modal-order" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-order')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Summary Pesanan</h3>
+                <button onclick="closeModal('modal-order')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs text-gray-500">Nama Kegiatan</p>
+                    <p id="summary-event-name" class="font-semibold text-gray-800"></p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Tiket</label>
+                    <input type="number" id="ticket-quantity" value="1" min="1" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" oninput="updateSummaryTotal()">
+                </div>
+                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <span class="font-semibold text-gray-800">Total Harga</span>
+                    <span id="summary-total-price" class="text-xl font-bold text-gold"></span>
+                </div>
+                <span id="summary-event-price" class="hidden"></span>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-order')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                <button type="button" onclick="alert('Pesanan dikonfirmasi!'); closeModal('modal-order');" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Konfirmasi Pesanan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div id="modal-detail" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-detail')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="detail-title">Detail Tiket</h3>
+                <button onclick="closeModal('modal-detail')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3 text-sm">
+                <div class="flex"><p class="w-1/3 text-gray-500">Merchant</p><p id="detail-merchant" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500" id="detail-date-label">Tanggal</p><p id="detail-date" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Waktu</p><p id="detail-time" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Harga</p><p id="detail-price" class="w-2/3 font-medium text-gold"></p></div>
+                <div class="pt-3 border-t border-gray-100 mt-3">
+                     <p class="text-gray-500 mb-2">Deskripsi</p>
+                     <p id="detail-desc" class="text-gray-700 leading-relaxed"></p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-detail')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Tutup</button>
+                <button type="button" id="detail-order-btn" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Order Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Kegiatan -->
+    <div id="modal-add-event" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-add-event')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Tambah Kegiatan Baru</h3>
+                <button onclick="closeModal('modal-add-event')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modal-add-event'); alert('Kegiatan berhasil ditambahkan!');">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Nama Kegiatan</label>
+                        <input type="text" placeholder="Contoh: Manasik Akbar" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Merchant</label>
+                        <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm">
+                            <option>Al-Hijaz Indowisata</option>
+                            <option>Barokah Travel</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">Jadwal Kegiatan</label>
+                        <div class="flex gap-4 mb-3">
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="radio" name="event_type" value="once" class="text-gold focus:ring-gold" checked onchange="toggleScheduleType('once')">
+                                <span>Sekali</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="radio" name="event_type" value="recurring" class="text-gold focus:ring-gold" onchange="toggleScheduleType('recurring')">
+                                <span>Berulang</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Single Date Picker -->
+                        <div id="schedule-once">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Tanggal</label>
+                            <input type="date" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm">
+                        </div>
+
+                        <!-- Recurring Day Picker -->
+                        <div id="schedule-recurring" class="hidden">
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Hari</label>
+                            <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Senin</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Selasa</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Rabu</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Kamis</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Jumat</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Sabtu</span></label>
+                                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer p-2 rounded-lg border border-gray-200 has-[:checked]:bg-gold-50 has-[:checked]:border-gold"><input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300"><span>Minggu</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Sesi</label><input type="text" placeholder="Pagi/Sore" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm"></div>
+                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Waktu</label><input type="text" placeholder="08:00 - 12:00" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm"></div>
+                    </div>
+                    <!-- Tiered Pricing -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">Pengaturan Harga Bertingkat</label>
+                        <div id="price-tiers-container" class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <input type="number" placeholder="Min" class="w-1/4 px-3 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                                <input type="number" placeholder="Max" class="w-1/4 px-3 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                                <div class="relative flex-1">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                                    <input type="number" placeholder="Harga" class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addPriceTier()" class="mt-2 text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors flex items-center gap-1 border border-blue-100">
+                            <i class="fas fa-plus"></i> Tambah Rentang Harga
+                        </button>
+                    </div>
+                    <!-- Kuota -->
+                    <div>
+                        <div><label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Kuota</label><input type="number" placeholder="Contoh: 100" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm"></div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 mt-6">
+                    <button type="button" onclick="closeModal('modal-add-event')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Simpan Kegiatan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function switchView(view) {
+            const viewEvent = document.getElementById('view-event');
+            const viewKunjungan = document.getElementById('view-kunjungan');
+            const linkEvent = document.getElementById('link-event');
+            const linkKunjungan = document.getElementById('link-kunjungan');
+            const breadcrumb = document.getElementById('breadcrumb-active');
+
+            if (view === 'event') {
+                viewEvent.classList.remove('hidden');
+                viewKunjungan.classList.add('hidden');
+                linkEvent.classList.add('text-gold', 'bg-gold-50');
+                linkEvent.classList.remove('text-gray-500');
+                linkKunjungan.classList.remove('text-gold', 'bg-gold-50');
+                linkKunjungan.classList.add('text-gray-500');
+                breadcrumb.textContent = 'Event';
+            } else {
+                viewEvent.classList.add('hidden');
+                viewKunjungan.classList.remove('hidden');
+                linkKunjungan.classList.add('text-gold', 'bg-gold-50');
+                linkKunjungan.classList.remove('text-gray-500');
+                linkEvent.classList.remove('text-gold', 'bg-gold-50');
+                linkEvent.classList.add('text-gray-500');
+                breadcrumb.textContent = 'Kunjungan';
+            }
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function openDetailModal(title, merchant, date, time, price, desc) {
+            document.getElementById('detail-title').textContent = title;
+            document.getElementById('detail-merchant').textContent = merchant;
+            document.getElementById('detail-date').textContent = date;
+            document.getElementById('detail-time').textContent = time;
+            document.getElementById('detail-desc').textContent = desc;
+            
+            const formatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+            document.getElementById('detail-price').textContent = formatter.format(price);
+            
+            // Update label based on view (Tanggal vs Hari)
+            const isKunjungan = !document.getElementById('view-kunjungan').classList.contains('hidden');
+            document.getElementById('detail-date-label').textContent = isKunjungan ? 'Hari' : 'Tanggal';
+
+            document.getElementById('detail-order-btn').onclick = function() { closeModal('modal-detail'); openOrderModal(title, price); };
+            openModal('modal-detail');
+        }
+
+        function openOrderModal(eventName, eventPrice) {
+            document.getElementById('summary-event-name').textContent = eventName;
+            document.getElementById('summary-event-price').textContent = eventPrice;
+            document.getElementById('ticket-quantity').value = 1;
+            updateSummaryTotal();
+            openModal('modal-order');
+        }
+
+        function updateSummaryTotal() {
+            const quantity = parseInt(document.getElementById('ticket-quantity').value) || 0;
+            const price = parseInt(document.getElementById('summary-event-price').textContent) || 0;
+            const total = quantity * price;
+            
+            const formatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+            document.getElementById('summary-total-price').textContent = formatter.format(total);
+        }
+
+        function filterTable(type) {
+            const input = document.getElementById('search-input-' + type);
+            const filter = input.value.toLowerCase();
+            const tableBody = document.getElementById('table-body-' + type);
+            const rows = tableBody.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const eventNameCell = rows[i].getElementsByTagName('td')[0];
+                if (eventNameCell) {
+                    const eventName = eventNameCell.textContent || eventNameCell.innerText;
+                    rows[i].style.display = eventName.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+
+        function toggleScheduleType(type) {
+            const onceContainer = document.getElementById('schedule-once');
+            const recurringContainer = document.getElementById('schedule-recurring');
+
+            if (type === 'once') {
+                onceContainer.classList.remove('hidden');
+                recurringContainer.classList.add('hidden');
+            } else {
+                onceContainer.classList.add('hidden');
+                recurringContainer.classList.remove('hidden');
+            }
+        }
+
+        function addPriceTier() {
+            const container = document.getElementById('price-tiers-container');
+            const newTier = document.createElement('div');
+            newTier.className = 'flex items-center gap-2';
+            newTier.innerHTML = `
+                <input type="number" placeholder="Min" class="w-1/4 px-3 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                <input type="number" placeholder="Max" class="w-1/4 px-3 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                <div class="relative flex-1">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                    <input type="number" placeholder="Harga" class="w-full pl-8 pr-2 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none text-sm" required>
+                </div>
+                <button type="button" onclick="this.parentElement.remove()" class="text-red-500 hover:text-red-700 transition-colors p-2"><i class="fas fa-trash"></i></button>
+            `;
+            container.appendChild(newTier);
+        }
+    </script>
+</body>
+</html>

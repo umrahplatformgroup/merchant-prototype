@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccine - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <a href="#" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group flex items-center justify-between">
+                            <div class="relative">
+                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                Gift
+                            </div>
+                            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Soon</span>
+                        </a>
+                        <a href="#" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group flex items-center justify-between">
+                            <div class="relative">
+                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                Equipment
+                            </div>
+                            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Soon</span>
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Vaccine</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Vaccine</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <h3 class="text-xl font-bold text-gray-800">Daftar Paket Vaksin</h3>
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <div class="relative w-full md:w-64">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" placeholder="Cari vaksin..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                        </div>
+                        <button onclick="openAddModal()" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20 whitespace-nowrap">
+                            <i class="fas fa-plus"></i> Tambah Paket
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                    <th class="p-4 font-semibold">No</th>
+                                    <th class="p-4 font-semibold">Nama Produk</th>
+                                    <th class="p-4 font-semibold">Jenis Vaksin</th>
+                                    <th class="p-4 font-semibold">Merchant</th>
+                                    <th class="p-4 font-semibold">Harga</th>
+                                    <th class="p-4 font-semibold">Add Service</th>
+                                    <th class="p-4 font-semibold">Status</th>
+                                    <th class="p-4 font-semibold text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <!-- Dummy 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 text-gray-500">1</td>
+                                    <td class="p-4 font-medium text-gray-800">Vaksin Meningitis + Buku Kuning</td>
+                                    <td class="p-4 text-gray-600">Meningitis</td>
+                                    <td class="p-4 text-gray-600">Klinik Sehat Utama</td>
+                                    <td class="p-4 font-medium text-gold">Rp 350.000</td>
+                                    <td class="p-4 text-gray-600">
+                                        <span class="inline-block bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full">Buku Kuning</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded-lg border border-green-100 font-medium">Aktif</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="openDetailModal({nama: 'Vaksin Meningitis + Buku Kuning', deskripsi: 'Vaksin meningitis wajib untuk jamaah umroh. Sudah termasuk buku kuning internasional (ICV).', jenis: ['Meningitis'], addService: 'Buku Kuning\nKonsultasi Dokter', harga: 350000, minOrder: 1, komisiPlus: 25000, komisiOnly: 15000})" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="vaccine-order.html?package=Vaksin Meningitis + Buku Kuning&price=350000" class="text-xs bg-gold hover:bg-gold-600 text-white px-2 py-1 rounded transition-colors" title="Order">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </a>
+                                            <button onclick="openEditModal({nama: 'Vaksin Meningitis + Buku Kuning', deskripsi: 'Vaksin meningitis wajib untuk jamaah umroh. Sudah termasuk buku kuning internasional (ICV).', jenis: ['Meningitis'], addService: 'Buku Kuning\nKonsultasi Dokter', harga: 350000, minOrder: 1, komisiPlus: 25000, komisiOnly: 15000})" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Dummy 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 text-gray-500">2</td>
+                                    <td class="p-4 font-medium text-gray-800">Vaksin Influenza (Home Service)</td>
+                                    <td class="p-4 text-gray-600">Influenza</td>
+                                    <td class="p-4 text-gray-600">Kimia Farma</td>
+                                    <td class="p-4 font-medium text-gold">Rp 450.000</td>
+                                    <td class="p-4 text-gray-600">
+                                        <span class="inline-block bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full">Home Service</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded-lg border border-green-100 font-medium">Aktif</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="openDetailModal({nama: 'Vaksin Influenza (Home Service)', deskripsi: 'Vaksin influenza dengan layanan home service (tenaga kesehatan datang ke lokasi).', jenis: ['Influenza'], addService: 'Home Service\nTransportasi Nakes\nAlat Kesehatan', harga: 450000, minOrder: 5, komisiPlus: 30000, komisiOnly: 20000})" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="vaccine-order.html?package=Vaksin Influenza (Home Service)&price=450000" class="text-xs bg-gold hover:bg-gold-600 text-white px-2 py-1 rounded transition-colors" title="Order">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </a>
+                                            <button onclick="openEditModal({nama: 'Vaksin Influenza (Home Service)', deskripsi: 'Vaksin influenza dengan layanan home service (tenaga kesehatan datang ke lokasi).', jenis: ['Influenza'], addService: 'Home Service\nTransportasi Nakes\nAlat Kesehatan', harga: 450000, minOrder: 5, komisiPlus: 30000, komisiOnly: 20000})" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Dummy 3 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 text-gray-500">3</td>
+                                    <td class="p-4 font-medium text-gray-800">Paket Lengkap (Meningitis + Flu)</td>
+                                    <td class="p-4 text-gray-600">Combo</td>
+                                    <td class="p-4 text-gray-600">Klinik Sehat Utama</td>
+                                    <td class="p-4 font-medium text-gold">Rp 750.000</td>
+                                    <td class="p-4 text-gray-600">
+                                        <span class="inline-block bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded-full">Buku Kuning</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <span class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-lg border border-gray-200 font-medium">Tidak Aktif</span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button onclick="openDetailModal({nama: 'Paket Lengkap (Meningitis + Flu)', deskripsi: 'Paket hemat vaksin lengkap untuk perlindungan maksimal saat ibadah.', jenis: ['Meningitis', 'Influenza'], addService: 'Buku Kuning\nHome Service', harga: 750000, minOrder: 1, komisiPlus: 50000, komisiOnly: 35000})" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Lihat Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <a href="vaccine-order.html?package=Paket Lengkap (Meningitis + Flu)&price=750000" class="text-xs bg-gold hover:bg-gold-600 text-white px-2 py-1 rounded transition-colors" title="Order">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </a>
+                                            <button onclick="openEditModal({nama: 'Paket Lengkap (Meningitis + Flu)', deskripsi: 'Paket hemat vaksin lengkap untuk perlindungan maksimal saat ibadah.', jenis: ['Meningitis', 'Influenza'], addService: 'Buku Kuning\nHome Service', harga: 750000, minOrder: 1, komisiPlus: 50000, komisiOnly: 35000})" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit Package -->
+    <div id="modal-add-package" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-add-package')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800" id="modal-title">Tambah Paket Vaksin</h3>
+                <button onclick="closeModal('modal-add-package')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modal-add-package'); alert('Data tersimpan!');">
+                <div class="space-y-4">
+                    <!-- Nama Produk -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Nama Produk</label>
+                        <input type="text" id="input-nama" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="Contoh: Vaksin Meningitis" required>
+                    </div>
+                    <!-- Deskripsi -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Deskripsi</label>
+                        <textarea id="input-deskripsi" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="3" placeholder="Deskripsi singkat paket..."></textarea>
+                    </div>
+                    <!-- Jenis Vaksin -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">Jenis Vaksin</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="checkbox" name="jenis_vaksin" value="Meningitis" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Meningitis</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="checkbox" name="jenis_vaksin" value="Polio" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Polio</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                <input type="checkbox" name="jenis_vaksin" value="Influenza" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Influenza</span>
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Add Service -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Add Service</label>
+                        <textarea id="input-add-service" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="3" placeholder="Layanan tambahan (pisahkan dengan enter)..."></textarea>
+                    </div>
+                    <!-- Harga & Min Order -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Harga</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                                <input type="number" id="input-harga" class="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Minimum Order</label>
+                            <input type="number" id="input-min-order" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="1">
+                        </div>
+                    </div>
+                    <!-- Komisi -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Komisi Mitra Plus</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                                <input type="number" id="input-komisi-plus" class="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Komisi Mitra Only</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                                <input type="number" id="input-komisi-only" class="w-full pl-8 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <button type="button" onclick="closeModal('modal-add-package')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div id="modal-detail-package" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-detail-package')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800">Detail Paket Vaksin</h3>
+                <button onclick="closeModal('modal-detail-package')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3 text-sm">
+                <div class="flex"><p class="w-1/3 text-gray-500">Nama Produk</p><p id="detail-nama" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Jenis Vaksin</p><p id="detail-jenis" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Harga</p><p id="detail-harga" class="w-2/3 font-medium text-gold"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Min. Order</p><p id="detail-min-order" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Komisi Plus</p><p id="detail-komisi-plus" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="flex"><p class="w-1/3 text-gray-500">Komisi Only</p><p id="detail-komisi-only" class="w-2/3 font-medium text-gray-800"></p></div>
+                <div class="pt-3 border-t border-gray-100 mt-3">
+                     <p class="text-gray-500 mb-1">Deskripsi</p>
+                     <p id="detail-deskripsi" class="text-gray-700 leading-relaxed"></p>
+                </div>
+                <div class="pt-3 border-t border-gray-100 mt-3">
+                     <p class="text-gray-500 mb-1">Add Service</p>
+                     <ul id="detail-add-service" class="list-disc list-inside text-gray-700"></ul>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-detail-package')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            const menu = document.getElementById('menu-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+                menu.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+                menu.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function openAddModal() {
+            document.getElementById('modal-title').textContent = 'Tambah Paket Vaksin';
+            document.getElementById('input-nama').value = '';
+            document.getElementById('input-deskripsi').value = '';
+            document.getElementById('input-add-service').value = '';
+            document.getElementById('input-harga').value = '';
+            document.getElementById('input-min-order').value = '';
+            document.getElementById('input-komisi-plus').value = '';
+            document.getElementById('input-komisi-only').value = '';
+            document.querySelectorAll('input[name="jenis_vaksin"]').forEach(cb => cb.checked = false);
+            openModal('modal-add-package');
+        }
+
+        function openEditModal(data) {
+            document.getElementById('modal-title').textContent = 'Edit Paket Vaksin';
+            document.getElementById('input-nama').value = data.nama;
+            document.getElementById('input-deskripsi').value = data.deskripsi;
+            document.getElementById('input-add-service').value = data.addService;
+            document.getElementById('input-harga').value = data.harga;
+            document.getElementById('input-min-order').value = data.minOrder;
+            document.getElementById('input-komisi-plus').value = data.komisiPlus;
+            document.getElementById('input-komisi-only').value = data.komisiOnly;
+            
+            // Reset checkboxes
+            document.querySelectorAll('input[name="jenis_vaksin"]').forEach(cb => cb.checked = false);
+            // Check based on data
+            if (data.jenis) {
+                data.jenis.forEach(j => {
+                    const cb = document.querySelector(`input[name="jenis_vaksin"][value="${j}"]`);
+                    if (cb) cb.checked = true;
+                });
+            }
+            
+            openModal('modal-add-package');
+        }
+
+        function openDetailModal(data) {
+            document.getElementById('detail-nama').textContent = data.nama;
+            document.getElementById('detail-jenis').textContent = data.jenis.join(', ');
+            document.getElementById('detail-harga').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.harga);
+            document.getElementById('detail-min-order').textContent = data.minOrder + ' Pax';
+            document.getElementById('detail-komisi-plus').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.komisiPlus);
+            document.getElementById('detail-komisi-only').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(data.komisiOnly);
+            document.getElementById('detail-deskripsi').textContent = data.deskripsi;
+            
+            const serviceList = document.getElementById('detail-add-service');
+            serviceList.innerHTML = '';
+            if (data.addService) {
+                const services = data.addService.split('\n');
+                services.forEach(s => {
+                    if(s.trim()) {
+                        const li = document.createElement('li');
+                        li.textContent = s;
+                        serviceList.appendChild(li);
+                    }
+                });
+            }
+            
+            openModal('modal-detail-package');
+        }
+    </script>
+</body>
+</html>

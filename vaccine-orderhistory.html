@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pembelian Vaksin - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Riwayat Pembelian Vaksin</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="vaccine.html" class="hover:text-gold">Vaccine</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Riwayat Pembelian</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex items-center gap-4">
+                    <a href="vaccine.html" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Riwayat Pembelian</h3>
+                        <p id="product-title" class="text-sm text-gray-500"></p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                    <th class="p-4 font-semibold">Billing ID</th>
+                                    <th class="p-4 font-semibold">Tgl Pembelian</th>
+                                    <th class="p-4 font-semibold">Merchant</th>
+                                    <th class="p-4 font-semibold">Travel Pembeli</th>
+                                    <th class="p-4 font-semibold">Jadwal Vaksin</th>
+                                    <th class="p-4 font-semibold">Total</th>
+                                    <th class="p-4 font-semibold">Aksi</th>
+                                    <th class="p-4 font-semibold">Proses</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <!-- Dummy 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 font-mono text-xs text-gray-500">VC-20260215-001</td>
+                                    <td class="p-4 text-gray-600">15 Feb 2026</td>
+                                    <td class="p-4 text-gray-600">Klinik Sehat Utama</td>
+                                    <td class="p-4">
+                                        <p class="font-medium text-gray-800">Nusa Travel</p>
+                                        <span class="text-[10px] bg-gray-700 text-white px-1.5 py-0.5 rounded-full font-semibold">Diamond</span>
+                                    </td>
+                                    <td class="p-4 text-gray-600">25 Feb 2026, 09:00</td>
+                                    <td class="p-4 font-medium text-gold">Rp 1.750.000</td>
+                                    <td class="p-4">
+                                        <a href="vaccine-orderdetail.html?id=VC-20260215-001" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors">Lihat Detail</a>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="relative inline-block text-left">
+                                            <button class="text-xs bg-green-500 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2">
+                                                Selesai <i class="fas fa-chevron-down text-xs opacity-70"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Dummy 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 font-mono text-xs text-gray-500">VC-20260214-002</td>
+                                    <td class="p-4 text-gray-600">14 Feb 2026</td>
+                                    <td class="p-4 text-gray-600">Klinik Sehat Utama</td>
+                                    <td class="p-4">
+                                        <p class="font-medium text-gray-800">Amanah Tour</p>
+                                        <span class="text-[10px] bg-yellow-400 text-yellow-900 px-1.5 py-0.5 rounded-full font-semibold">Gold</span>
+                                    </td>
+                                    <td class="p-4 text-gray-600">22 Feb 2026, 14:00</td>
+                                    <td class="p-4 font-medium text-gold">Rp 700.000</td>
+                                    <td class="p-4">
+                                        <a href="vaccine-orderdetail.html?id=VC-20260214-002" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors">Lihat Detail</a>
+                                    </td>
+                                    <td class="p-4">
+                                        <div class="relative inline-block text-left">
+                                            <button class="text-xs bg-blue-500 text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2">
+                                                Proses <i class="fas fa-chevron-down text-xs opacity-70"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productName = urlParams.get('product');
+            if (productName) {
+                document.getElementById('product-title').textContent = `Untuk: ${decodeURIComponent(productName)}`;
+            }
+        });
+
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+    </script>
+</body>
+</html>

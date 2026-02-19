@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Pesanan Vaksin - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <div class="space-y-1">
+                    <button class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Detail Pesanan Vaksin</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="vaccine.html" class="hover:text-gold">Vaccine</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="vaccine-orderhistory.html" class="hover:text-gold">Riwayat Pembelian</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Detail</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex items-center gap-4">
+                    <a href="vaccine-orderhistory.html" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Detail Pesanan <span id="detail-billing-id" class="font-mono text-lg text-gray-500"></span></h3>
+                    </div>
+                </div>
+
+                <div id="order-detail-container" class="max-w-5xl mx-auto space-y-6">
+                    <!-- Rincian Pesanan -->
+                    <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Rincian Pesanan</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                            <div class="space-y-3">
+                                <div class="flex"><p class="w-2/5 text-gray-500">Nama Pembeli</p><p id="detail-buyer-name" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">No. WA Pembeli</p><p id="detail-buyer-wa" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">Jadwal Vaksin</p><p id="detail-schedule" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">Jumlah Jamaah</p><p id="detail-pax" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">Total Harga</p><p id="detail-total" class="w-3/5 font-bold text-gold"></p></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="flex"><p class="w-2/5 text-gray-500">Alamat</p><p id="detail-address" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">Nama PIC</p><p id="detail-pic-name" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">No. WA PIC</p><p id="detail-pic-wa" class="w-3/5 font-medium text-gray-800"></p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daftar Jamaah -->
+                    <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                        <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Daftar Jamaah</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">No</th>
+                                        <th class="p-4 font-semibold">Nama Jamaah</th>
+                                        <th class="p-4 font-semibold">No. WA</th>
+                                        <th class="p-4 font-semibold">NIK</th>
+                                        <th class="p-4 font-semibold">No. Paspor</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pilgrims-table-body" class="text-sm divide-y divide-gray-100">
+                                    <!-- Content generated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="order-not-found" class="hidden text-center text-gray-500 mt-16">
+                    <i class="fas fa-exclamation-circle text-4xl text-red-400 mb-4"></i>
+                    <p class="text-lg font-medium">Pesanan tidak ditemukan.</p>
+                    <p>ID pesanan yang Anda cari tidak valid atau tidak ada dalam sistem.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Edit Jamaah -->
+    <div id="modal-edit-pilgrim" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-edit-pilgrim')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Edit Data Jamaah</h3>
+                <button onclick="closeModal('modal-edit-pilgrim')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modal-edit-pilgrim'); alert('Data jamaah diperbarui!');">
+                <input type="hidden" id="edit-pilgrim-index">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Nama Jamaah</label>
+                        <input type="text" id="edit-nama" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">No. WA</label>
+                        <input type="tel" id="edit-wa" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">NIK</label>
+                        <input type="text" id="edit-nik" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">No. Paspor</label>
+                        <input type="text" id="edit-paspor" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <button type="button" onclick="closeModal('modal-edit-pilgrim')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Upload Sertifikat -->
+    <div id="modal-upload-cert" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-upload-cert')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Upload Sertifikat Vaksin</h3>
+                <button onclick="closeModal('modal-upload-cert')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <form onsubmit="event.preventDefault(); closeModal('modal-upload-cert'); alert('Sertifikat berhasil diupload!');">
+                <input type="hidden" id="upload-pilgrim-index">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Jenis Vaksin</label>
+                        <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                            <option value="Meningitis">Meningitis</option>
+                            <option value="Influenza">Influenza</option>
+                            <option value="Polio">Polio</option>
+                            <option value="Covid-19">Covid-19</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Masa Berlaku</label>
+                        <input type="date" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Pilih File (PDF/JPG)</label>
+                        <input type="file" accept=".pdf,.jpg,.jpeg,.png" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gold-50 file:text-gold hover:file:bg-gold-100" required>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <button type="button" onclick="closeModal('modal-upload-cert')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const allOrders = {
+            'VC-20260215-001': {
+                billingId: 'VC-20260215-001',
+                buyerName: 'Bapak H. Abdullah',
+                buyerWa: '0812-1111-2222',
+                schedule: '25 Feb 2026, 09:00',
+                pax: 5,
+                total: 'Rp 1.750.000',
+                address: 'Jl. Gatot Subroto No. 12, Jakarta Selatan',
+                picName: 'Staff Nusa Travel',
+                picWa: '0812-1111-2233',
+                pilgrims: [
+                    { name: 'Jamaah Satu', wa: '0811-0000-0001', nik: '3201010101010001', passport: 'A1234567' },
+                    { name: 'Jamaah Dua', wa: '0812-0000-0002', nik: '3201010101010002', passport: 'A1234568' },
+                    { name: 'Jamaah Tiga', wa: '0813-0000-0003', nik: '3201010101010003', passport: 'A1234569' },
+                    { name: 'Jamaah Empat', wa: '0814-0000-0004', nik: '3201010101010004', passport: 'A1234570' },
+                    { name: 'Jamaah Lima', wa: '0815-0000-0005', nik: '3201010101010005', passport: 'A1234571' },
+                ]
+            },
+            'VC-20260214-002': {
+                billingId: 'VC-20260214-002',
+                buyerName: 'Ibu Hj. Fatimah',
+                buyerWa: '0819-3333-4444',
+                schedule: '22 Feb 2026, 14:00',
+                pax: 2,
+                total: 'Rp 700.000',
+                address: 'Jl. Sudirman Kav. 5, Bandung',
+                picName: 'Staff Amanah Tour',
+                picWa: '0819-3333-4455',
+                pilgrims: [
+                    { name: 'Jamaah Enam', wa: '0816-0000-0006', nik: '3273010101010001', passport: 'B5512345' },
+                    { name: 'Jamaah Tujuh', wa: '0817-0000-0007', nik: '3273010101010002', passport: 'B5512346' },
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const orderData = allOrders[orderId];
+
+            if (orderData) {
+                document.getElementById('detail-billing-id').textContent = orderData.billingId;
+                document.getElementById('detail-buyer-name').textContent = orderData.buyerName;
+                document.getElementById('detail-buyer-wa').textContent = orderData.buyerWa;
+                document.getElementById('detail-schedule').textContent = orderData.schedule;
+                document.getElementById('detail-pax').textContent = orderData.pax + ' Jamaah';
+                document.getElementById('detail-total').textContent = orderData.total;
+                document.getElementById('detail-address').textContent = orderData.address;
+                document.getElementById('detail-pic-name').textContent = orderData.picName;
+                document.getElementById('detail-pic-wa').textContent = orderData.picWa;
+
+                const tableBody = document.getElementById('pilgrims-table-body');
+                tableBody.innerHTML = '';
+                orderData.pilgrims.forEach((p, index) => {
+                    const row = `
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 text-gray-500">${index + 1}</td>
+                            <td class="p-4 font-medium text-gray-800">${p.name}</td>
+                            <td class="p-4 text-gray-600">${p.wa}</td>
+                            <td class="p-4 text-gray-600">${p.nik}</td>
+                            <td class="p-4 text-gray-600">${p.passport}</td>
+                            <td class="p-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button onclick="openEditPilgrimModal(${index})" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1.5 rounded transition-colors" title="Edit Data">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button onclick="openUploadCertificateModal(${index})" class="text-xs bg-green-50 hover:bg-green-100 text-green-600 px-2 py-1.5 rounded transition-colors flex items-center gap-1" title="Upload Sertifikat">
+                                        <i class="fas fa-upload"></i> Upload
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } else {
+                document.getElementById('order-detail-container').classList.add('hidden');
+                document.getElementById('order-not-found').classList.remove('hidden');
+            }
+        });
+
+        function openEditPilgrimModal(index) {
+            // In a real app, you would fetch the specific pilgrim data from the array using the index
+            // For now, we'll just grab the data from the table row or use dummy data logic
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            const pilgrim = allOrders[orderId].pilgrims[index];
+
+            document.getElementById('edit-pilgrim-index').value = index;
+            document.getElementById('edit-nama').value = pilgrim.name;
+            document.getElementById('edit-wa').value = pilgrim.wa;
+            document.getElementById('edit-nik').value = pilgrim.nik;
+            document.getElementById('edit-paspor').value = pilgrim.passport;
+
+            document.getElementById('modal-edit-pilgrim').classList.remove('hidden');
+        }
+
+        function openUploadCertificateModal(index) {
+            document.getElementById('upload-pilgrim-index').value = index;
+            // Reset form if needed
+            document.getElementById('modal-upload-cert').querySelector('form').reset();
+            document.getElementById('modal-upload-cert').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+    </script>
+</body>
+</html>

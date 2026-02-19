@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Vaccine - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Vaccine Order</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="vaccine.html" class="hover:text-gold">Vaccine</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Order</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex items-center gap-4">
+                    <a href="vaccine.html" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <h3 class="text-xl font-bold text-gray-800">Formulir Pemesanan Vaksin</h3>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <form id="form-vaccine-order" class="space-y-6 animate-fade-in" onsubmit="event.preventDefault(); alert('Pesanan Vaksin Terkirim!'); window.location.href='vaccine.html';">
+                        
+                        <!-- Info Paket -->
+                        <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Informasi Paket</h4>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500">Paket Dipilih</p>
+                                    <p id="display-package-name" class="font-medium text-gray-800 text-lg">-</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500">Harga per Pax</p>
+                                    <p id="display-package-price" class="font-bold text-gold text-lg">Rp 0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Pembeli -->
+                        <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Data Pembeli</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Nama Pembeli</label>
+                                    <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">No. WhatsApp</label>
+                                    <input type="tel" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Jamaah -->
+                        <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Data Jamaah</h4>
+                            <div class="mb-4">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Jamaah</label>
+                                <input type="number" id="input-pax-count" min="1" value="1" class="w-full md:w-1/3 px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" oninput="renderPilgrimFields(); calculateTotal();">
+                            </div>
+                            <div id="pilgrim-fields-container" class="space-y-4">
+                                <!-- Fields generated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Jadwal & Lokasi -->
+                        <div class="bg-white p-6 rounded-xl shadow-soft border border-gray-100">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4 border-b border-gray-100 pb-2">Jadwal & Lokasi</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Tanggal (Min. H+7)</label>
+                                    <input type="date" id="input-date" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Waktu</label>
+                                    <input type="time" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                </div>
+                            </div>
+                            <div class="space-y-3 border-t border-gray-100 pt-4">
+                                <p class="text-sm font-semibold text-gray-700">Titik Penjemputan / Lokasi Vaksin</p>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">Alamat Lengkap</label>
+                                    <textarea class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="2" required></textarea>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">Nama PIC</label>
+                                        <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">No. WA PIC</label>
+                                        <input type="tel" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pembayaran & Total -->
+                        <div class="bg-white p-6 rounded-xl shadow-lg border border-gold/20">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">Ringkasan & Pembayaran</h4>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-gray-600 text-sm">Total Harga (<span id="summary-pax">1</span> Jamaah)</span>
+                                <span id="summary-total" class="text-2xl font-bold text-gold">Rp 0</span>
+                            </div>
+                            <div class="mb-6">
+                                <label class="block text-xs font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-2 text-sm cursor-pointer p-3 border border-gray-200 rounded-lg w-full hover:bg-gray-50 has-[:checked]:border-gold has-[:checked]:bg-gold-50 transition-all">
+                                        <input type="radio" name="payment_method" value="online" class="text-gold focus:ring-gold" checked>
+                                        <span>Online Payment</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm cursor-pointer p-3 border border-gray-200 rounded-lg w-full hover:bg-gray-50 has-[:checked]:border-gold has-[:checked]:bg-gold-50 transition-all">
+                                        <input type="radio" name="payment_method" value="ots" class="text-gold focus:ring-gold">
+                                        <span>On The Spot</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-gold hover:bg-gold-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-gold/30 transition-all transform hover:-translate-y-0.5">
+                                Kirim Pemesanan
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize
+        const urlParams = new URLSearchParams(window.location.search);
+        const packageName = urlParams.get('package') || 'Paket Vaksin';
+        const packagePrice = parseInt(urlParams.get('price')) || 0;
+
+        document.getElementById('display-package-name').textContent = packageName;
+        document.getElementById('display-package-price').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(packagePrice);
+
+        // Set Min Date (Today + 7 days)
+        const today = new Date();
+        today.setDate(today.getDate() + 7);
+        const minDate = today.toISOString().split('T')[0];
+        document.getElementById('input-date').setAttribute('min', minDate);
+
+        function renderPilgrimFields() {
+            const count = parseInt(document.getElementById('input-pax-count').value) || 1;
+            const container = document.getElementById('pilgrim-fields-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const html = `
+                    <div class="p-4 bg-gray-50 rounded-lg border border-gray-200 animate-fade-in">
+                        <p class="text-xs font-bold text-gray-500 uppercase mb-3">Data Jamaah #${i}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div><input type="text" placeholder="Nama Lengkap" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
+                            <div><input type="tel" placeholder="No. WhatsApp" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
+                            <div><input type="text" placeholder="NIK" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
+                            <div><input type="text" placeholder="No. Paspor" class="w-full px-3 py-2 rounded border border-gray-300 text-sm focus:border-gold outline-none" required></div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            }
+        }
+
+        function calculateTotal() {
+            const count = parseInt(document.getElementById('input-pax-count').value) || 1;
+            const total = count * packagePrice;
+            
+            document.getElementById('summary-pax').textContent = count;
+            document.getElementById('summary-total').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+        }
+
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        // Initial Render
+        renderPilgrimFields();
+        calculateTotal();
+    </script>
+</body>
+</html>

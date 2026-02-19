@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Umroh CMS - Executive Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            100: '#f9f0e0',
+                            200: '#f3dec0',
+                            300: '#ebc595',
+                            400: '#e1a65f',
+                            500: '#cb9032', // Base Color
+                            600: '#b07527',
+                            700: '#8d5a22',
+                            800: '#734822',
+                            900: '#5f3c20',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e2e8f0; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cb9032; 
+        }
+
+        .sidebar-menu-item {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active {
+            background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%);
+            color: #cb9032;
+            border-left-color: #cb9032;
+        }
+        .sidebar-menu-item i {
+            width: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .sidebar-menu-item:hover i, .sidebar-menu-item.active i {
+            transform: scale(1.1);
+        }
+        
+        /* Submenu Item Active State */
+        .submenu-item.active {
+            color: #cb9032;
+            background-color: #fdf9f2;
+        }
+        .submenu-item.active span {
+            background-color: #cb9032;
+        }
+        
+        /* Modal Background */
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <!-- Logo Section -->
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                
+                <!-- Merchant Menu with Submenu -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 group-hover:text-gold rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <!-- Submenu Container -->
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="#" onclick="showContent('merchant-list')" class="submenu-item active block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group" id="link-merchant-list">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group" id="link-merchant-land">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group" id="link-merchant-ticketing">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <a href="#" onclick="showContent('merchant-gift')" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group flex items-center justify-between" id="link-merchant-gift">
+                            <div class="relative">
+                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Gift
+                            </div>
+                            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Soon</span>
+                        </a>
+                        <a href="#" onclick="showContent('merchant-equipment')" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group flex items-center justify-between" id="link-merchant-equipment">
+                            <div class="relative">
+                                <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                Equipment
+                            </div>
+                            <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Soon</span>
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </nav>
+
+            <!-- Bottom Action -->
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT WRAPPER -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- TOP HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <!-- Left: Breadcrumb -->
+                <div class="flex items-center gap-6">
+                    <button class="md:hidden text-gray-500 hover:text-gold">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800" id="page-title">Daftar Merchant</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Home</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold" id="breadcrumb-current">Merchant / Daftar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Actions -->
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- SCROLLABLE CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                
+                <!-- NEW CONTENT PLACEHOLDERS FOR MERCHANT -->
+                
+                <!-- CONTENT: DAFTAR MERCHANT -->
+                <div id="content-merchant-list" class="content-section">
+                    <div class="mb-6 flex justify-between items-center">
+                        <h3 class="text-xl font-bold text-gray-800">Daftar Merchant</h3>
+                        <button onclick="openModal('modal-add-merchant')" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20">
+                            <i class="fas fa-plus"></i> Tambah Merchant
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">No</th>
+                                        <th class="p-4 font-semibold">Nama Merchant</th>
+                                        <th class="p-4 font-semibold">Kategori</th>
+                                        <th class="p-4 font-semibold">Kontak</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-gray-100">
+                                    <!-- Dummy 1 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 text-gray-500">1</td>
+                                        <td class="p-4 font-medium text-gray-800">Al-Hijaz Indowisata</td>
+                                        <td class="p-4 text-gray-600">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="inline-block bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5 rounded-full border border-blue-100">Land Arrangement</span>
+                                                <span class="inline-block bg-purple-50 text-purple-600 text-[10px] px-2 py-0.5 rounded-full border border-purple-100">Ticketing</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600">
+                                            <div class="flex flex-col gap-1">
+                                                <span class="flex items-center gap-1 text-xs"><i class="far fa-envelope text-gray-400 w-4"></i> info@alhijaz.com</span>
+                                                <span class="flex items-center gap-1 text-xs"><i class="fab fa-whatsapp text-green-500 w-4"></i> 0812-3456-7890</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4">
+                                            <span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded-lg border border-green-100 font-medium">Aktif</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded transition-colors" title="Tambah Admin">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                                <button class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- Dummy 2 -->
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 text-gray-500">2</td>
+                                        <td class="p-4 font-medium text-gray-800">Barokah Perlengkapan</td>
+                                        <td class="p-4 text-gray-600">
+                                            <div class="flex flex-wrap gap-1">
+                                                <span class="inline-block bg-orange-50 text-orange-600 text-[10px] px-2 py-0.5 rounded-full border border-orange-100">Equipment</span>
+                                                <span class="inline-block bg-pink-50 text-pink-600 text-[10px] px-2 py-0.5 rounded-full border border-pink-100">Gift</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600">
+                                            <div class="flex flex-col gap-1">
+                                                <span class="flex items-center gap-1 text-xs"><i class="far fa-envelope text-gray-400 w-4"></i> sales@barokah.com</span>
+                                                <span class="flex items-center gap-1 text-xs"><i class="fab fa-whatsapp text-green-500 w-4"></i> 0819-8765-4321</span>
+                                            </div>
+                                        </td>
+                                        <td class="p-4">
+                                            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-lg border border-gray-200 font-medium">Non-Aktif</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded transition-colors" title="Tambah Admin">
+                                                    <i class="fas fa-user-plus"></i>
+                                                </button>
+                                                <button class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTENT: HANDLING SERVICE -->
+                <div id="content-merchant-handling" class="content-section hidden">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
+                        <i class="fas fa-hands-helping text-4xl text-gold mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-700">Handling Service</h3>
+                        <p class="text-sm text-gray-400">Layanan Handling.</p>
+                    </div>
+                </div>
+
+                <!-- CONTENT: GIFT -->
+                <div id="content-merchant-gift" class="content-section hidden">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
+                        <i class="fas fa-gift text-4xl text-gold mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-700">Gift Management</h3>
+                        <p class="text-sm text-gray-400">Halaman pengaturan hadiah dan voucher.</p>
+                    </div>
+                </div>
+
+                <!-- CONTENT: EQUIPMENT -->
+                <div id="content-merchant-equipment" class="content-section hidden">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
+                        <i class="fas fa-suitcase text-4xl text-gold mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-700">Equipment</h3>
+                        <p class="text-sm text-gray-400">Perlengkapan Umroh.</p>
+                    </div>
+                </div>
+
+                <!-- CONTENT: VACCINE -->
+                <div id="content-merchant-vaccine" class="content-section hidden">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
+                        <i class="fas fa-syringe text-4xl text-gold mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-700">Vaccine</h3>
+                        <p class="text-sm text-gray-400">Layanan Vaksin.</p>
+                    </div>
+                </div>
+
+                <!-- CONTENT: TRANSACTION -->
+                <div id="content-merchant-transaction" class="content-section hidden">
+                    <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
+                        <i class="fas fa-receipt text-4xl text-gold mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-700">Riwayat Transaksi</h3>
+                        <p class="text-sm text-gray-400">Data transaksi penjualan merchant.</p>
+                    </div>
+                </div>
+
+                <!-- PREVIOUS CONTENT (HIDDEN BUT KEPT IN CODE IF NEEDED LATER) -->
+                <!-- Whitelabel content sections are removed from view but you can restore them if needed -->
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Merchant -->
+    <div id="modal-add-merchant" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-add-merchant')"></div>
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Tambah Merchant Baru</h3>
+                <button onclick="closeModal('modal-add-merchant')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); closeModal('modal-add-merchant'); alert('Data tersimpan (dummy)!');">
+                <div class="space-y-4">
+                    <!-- Nama Merchant -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Nama Merchant</label>
+                        <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="Contoh: Al-Hijaz Travel" required>
+                    </div>
+
+                    <!-- Kategori Checkboxes -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-2">Kategori Layanan</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Land Arrangement</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Handling Service</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Ticketing</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Gift</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Equipment</span>
+                            </label>
+                            <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                                <input type="checkbox" class="rounded text-gold focus:ring-gold border-gray-300">
+                                <span>Vaccine</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Email & WA -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="email@domain.com">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">No. WhatsApp</label>
+                            <input type="tel" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0812...">
+                        </div>
+                    </div>
+
+                    <!-- Alamat -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Alamat Lengkap</label>
+                        <textarea class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" rows="3" placeholder="Jl. Raya..."></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                        <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                            <option value="active">Aktif</option>
+                            <option value="inactive">Non-Aktif</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <button type="button" onclick="closeModal('modal-add-merchant')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Simpan Merchant</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle Sidebar Submenu (Accordion)
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            const menu = document.getElementById('menu-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                // Open
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+                menu.classList.add('text-gold');
+            } else {
+                // Close
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+                menu.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+            }
+        }
+
+        // Show Content Function (Single Page Application feel)
+        function showContent(contentId) {
+            // 1. Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // 2. Show the selected content
+            const selectedContent = document.getElementById('content-' + contentId);
+            if (selectedContent) {
+                selectedContent.classList.remove('hidden');
+            }
+
+            // 3. Update Page Title & Breadcrumb
+            const pageTitles = {
+                'merchant-list': 'Daftar Merchant',
+                'merchant-land': 'Land Arrangement',
+                'merchant-handling': 'Handling Service',
+                'merchant-ticketing': 'Ticketing',
+                'merchant-gift': 'Gift Management',
+                'merchant-equipment': 'Equipment',
+                'merchant-vaccine': 'Vaccine',
+                'merchant-transaction': 'Transaksi Merchant'
+            };
+            const breadcrumbs = {
+                'merchant-list': 'Merchant / Daftar',
+                'merchant-land': 'Merchant / Land Arrangement',
+                'merchant-handling': 'Merchant / Handling Service',
+                'merchant-ticketing': 'Merchant / Ticketing',
+                'merchant-gift': 'Merchant / Gift',
+                'merchant-equipment': 'Merchant / Equipment',
+                'merchant-vaccine': 'Merchant / Vaccine',
+                'merchant-transaction': 'Merchant / Transaction'
+            };
+
+            document.getElementById('page-title').textContent = pageTitles[contentId] || 'Dashboard';
+            document.getElementById('breadcrumb-current').textContent = breadcrumbs[contentId] || 'Overview';
+
+            // 4. Update Active State in Sidebar
+            // Reset all active states
+            document.querySelectorAll('.sidebar-menu-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.submenu-item').forEach(el => el.classList.remove('active'));
+
+            // Set active state
+            // It's a submenu item
+            const link = document.getElementById('link-' + contentId);
+            // Highlight the parent menu 'Merchant' if a child is selected
+            if (contentId.startsWith('merchant-')) {
+                const merchantMenu = document.getElementById('menu-merchant');
+                if (merchantMenu) merchantMenu.classList.add('text-gold');
+            }
+            if (link) link.classList.add('active');
+        }
+    </script>
+</body>
+</html>

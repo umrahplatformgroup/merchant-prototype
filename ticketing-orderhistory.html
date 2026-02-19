@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Pesanan Ticketing - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+
+                        <!-- Ticketing Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('ticketing')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Ticketing</span>
+                                </div>
+                                <i id="arrow-ticketing" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-ticketing" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="ticketing.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Dashboard</a>
+                                <a href="#" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Riwayat Pesanan</a>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Riwayat Pesanan Ticketing</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <a href="ticketing.html" class="hover:text-gold">Ticketing</a>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Riwayat Pesanan</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <a href="ticketing.html" class="text-gray-400 hover:text-gray-600 transition-colors" title="Kembali">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <h3 class="text-xl font-bold text-gray-800">Daftar Pesanan Tiket</h3>
+                    </div>
+                    <div class="relative w-full md:w-64">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-input" onkeyup="filterTable()" placeholder="Cari pemesan atau event..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                    <th class="p-4 font-semibold">Billing ID</th>
+                                    <th class="p-4 font-semibold">Tanggal Order</th>
+                                    <th class="p-4 font-semibold">Pemesan</th>
+                                    <th class="p-4 font-semibold">Kontak</th>
+                                    <th class="p-4 font-semibold">Nama Event/Kunjungan</th>
+                                    <th class="p-4 font-semibold">QTY</th>
+                                    <th class="p-4 font-semibold">Harga</th>
+                                    <th class="p-4 font-semibold">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body" class="text-sm divide-y divide-gray-100">
+                                <!-- Dummy 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 font-mono text-xs text-gray-500">TIX-20260212-001</td>
+                                    <td class="p-4 text-gray-600">12 Feb 2026</td>
+                                    <td class="p-4 font-medium text-gray-800">Ahmad Fulan</td>
+                                    <td class="p-4 text-gray-600">
+                                        <div class="flex flex-col gap-1">
+                                            <span class="flex items-center gap-1 text-xs"><i class="far fa-envelope text-gray-400 w-4"></i> ahmad@example.com</span>
+                                            <span class="flex items-center gap-1 text-xs"><i class="fab fa-whatsapp text-green-500 w-4"></i> 0812-3333-4444</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Manasik Akbar 2026</td>
+                                    <td class="p-4 text-gray-600">2</td>
+                                    <td class="p-4 font-medium text-gold">Rp 300.000</td>
+                                    <td class="p-4">
+                                        <span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded-lg border border-green-100 font-medium">Lunas</span>
+                                    </td>
+                                </tr>
+                                <!-- Dummy 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4 font-mono text-xs text-gray-500">TIX-20260211-003</td>
+                                    <td class="p-4 text-gray-600">11 Feb 2026</td>
+                                    <td class="p-4 font-medium text-gray-800">Siti Aminah</td>
+                                    <td class="p-4 text-gray-600">
+                                        <div class="flex flex-col gap-1">
+                                            <span class="flex items-center gap-1 text-xs"><i class="far fa-envelope text-gray-400 w-4"></i> siti@example.com</span>
+                                            <span class="flex items-center gap-1 text-xs"><i class="fab fa-whatsapp text-green-500 w-4"></i> 0819-5555-6666</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Museum Al-Wahyu</td>
+                                    <td class="p-4 text-gray-600">5</td>
+                                    <td class="p-4 font-medium text-gold">Rp 375.000</td>
+                                    <td class="p-4">
+                                        <span class="bg-orange-50 text-orange-600 text-xs px-2 py-1 rounded-lg border border-orange-100 font-medium">Pending</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function filterTable() {
+            const input = document.getElementById('search-input');
+            const filter = input.value.toLowerCase();
+            const tableBody = document.getElementById('history-table-body');
+            const rows = tableBody.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                const pemesanCell = rows[i].getElementsByTagName('td')[2];
+                const eventCell = rows[i].getElementsByTagName('td')[4];
+                if (pemesanCell && eventCell) {
+                    const pemesan = pemesanCell.textContent || pemesanCell.innerText;
+                    const eventName = eventCell.textContent || eventCell.innerText;
+                    if (pemesan.toLowerCase().indexOf(filter) > -1 || eventName.toLowerCase().indexOf(filter) > -1) {
+                        rows[i].style.display = "";
+                    } else {
+                        rows[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

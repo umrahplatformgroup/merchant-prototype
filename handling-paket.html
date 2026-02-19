@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handling Service Paket - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active .w-1.h-1 { background-color: #cb9032; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="land-arrangement.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Vaccine</span>
+                                </div>
+                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-vaccine" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Product List</a>
+                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Handling Service</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Handling Service</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Paket</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-gray-800">Daftar Paket Handling</h3>
+                    <a href="handling-setting.html" class="bg-white border border-gray-200 text-gray-600 hover:text-gold hover:border-gold px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                        <i class="fas fa-cog"></i> Atur Paket
+                    </a>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                    <th class="p-4 font-semibold">Nama Paket</th>
+                                    <th class="p-4 font-semibold">Merchant</th>
+                                    <th class="p-4 font-semibold">Harga</th>
+                                    <th class="p-4 font-semibold text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-gray-100">
+                                <!-- Paket 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800">Paket Bintang 3, 10 Malam</p>
+                                                <p class="text-xs text-gray-500">Akomodasi Bintang 3 + Transportasi</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                    <td class="p-4 font-medium text-gold">
+                                        Mulai $925
+                                        <button onclick="openTieringModal('Paket Bintang 3, 10 Malam', 925)" class="ml-2 text-gray-400 hover:text-gold transition-colors" title="Lihat Tiering Harga">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openDetailModal('Paket Bintang 3, 10 Malam', 'Layanan lengkap akomodasi Bintang 3 selama 10 malam, transportasi, dan handling.', 'Mulai $925', 'la_b3_10m')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                        <a href="handling-order.html?package=la_b3_10m" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1 inline-block">Order</a>
+                                        <a href="handling-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Paket 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800">Paket Bintang 4, 7 Malam</p>
+                                                <p class="text-xs text-gray-500">Akomodasi Bintang 4 + Transportasi</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                    <td class="p-4 font-medium text-gold">
+                                        Mulai $523
+                                        <button onclick="openTieringModal('Paket Bintang 4, 7 Malam', 523)" class="ml-2 text-gray-400 hover:text-gold transition-colors" title="Lihat Tiering Harga">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openDetailModal('Paket Bintang 4, 7 Malam', 'Layanan lengkap akomodasi Bintang 4 selama 7 malam, transportasi, dan handling.', 'Mulai $523', 'la_b4_7m')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                        <a href="handling-order.html?package=la_b4_7m" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1 inline-block">Order</a>
+                                        <a href="handling-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Paket 3 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800">Paket Bintang 5, 10 Malam Fullboard</p>
+                                                <p class="text-xs text-gray-500">Akomodasi Bintang 5 + Makan Fullboard</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                    <td class="p-4 font-medium text-gold">
+                                        Mulai $1,324
+                                        <button onclick="openTieringModal('Paket Bintang 5, 10 Malam Fullboard', 1324)" class="ml-2 text-gray-400 hover:text-gold transition-colors" title="Lihat Tiering Harga">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openDetailModal('Paket Bintang 5, 10 Malam Fullboard', 'Layanan lengkap akomodasi Bintang 5 Fullboard selama 10 malam.', 'Mulai $1,324', 'la_b5_10m_fb')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                        <a href="handling-order.html?package=la_b5_10m_fb" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1 inline-block">Order</a>
+                                        <a href="handling-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Paket 4 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800">Paket Bintang 4, 5 Malam + Breakfast</p>
+                                                <p class="text-xs text-gray-500">Akomodasi Bintang 4 + Sarapan</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                    <td class="p-4 font-medium text-gold">
+                                        Mulai $650
+                                        <button onclick="openTieringModal('Paket Bintang 4, 5 Malam + Breakfast', 650)" class="ml-2 text-gray-400 hover:text-gold transition-colors" title="Lihat Tiering Harga">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openDetailModal('Paket Bintang 4, 5 Malam + Breakfast', 'Layanan akomodasi Bintang 4 selama 5 malam termasuk sarapan.', 'Mulai $650', 'la_b4_5m_bb')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                        <a href="handling-order.html?package=la_b4_5m_bb" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1 inline-block">Order</a>
+                                        <a href="handling-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- Paket 5 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <i class="fas fa-box-open"></i>
+                                            </div>
+                                            <div>
+                                                <p class="font-medium text-gray-800">Paket Bintang 5, 7 Malam</p>
+                                                <p class="text-xs text-gray-500">Akomodasi Bintang 5 + Transportasi</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                    <td class="p-4 font-medium text-gold">
+                                        Mulai $1,100
+                                        <button onclick="openTieringModal('Paket Bintang 5, 7 Malam', 1100)" class="ml-2 text-gray-400 hover:text-gold transition-colors" title="Lihat Tiering Harga">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openDetailModal('Paket Bintang 5, 7 Malam', 'Layanan lengkap akomodasi Bintang 5 selama 7 malam.', 'Mulai $1,100', 'la_b5_7m')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                        <a href="handling-order.html?package=la_b5_7m" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1 inline-block">Order</a>
+                                        <a href="handling-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors inline-block">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Detail -->
+    <div id="modal-detail" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-detail')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="detail-title">Detail Paket</h3>
+                <button onclick="closeModal('modal-detail')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3 text-sm">
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Merchant</p>
+                    <p class="w-2/3 font-medium text-gray-800">Al-Hijaz Indowisata</p>
+                </div>
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Harga</p>
+                    <p id="detail-price" class="w-2/3 font-medium text-gold"></p>
+                </div>
+                <div class="pt-3 border-t border-gray-100 mt-3">
+                     <p class="text-gray-500 mb-2">Deskripsi</p>
+                     <p id="detail-desc" class="text-gray-700 leading-relaxed"></p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-detail')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Tutup</button>
+                <a id="detail-order-btn" href="#" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Order Sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tiering Price -->
+    <div id="modal-tiering" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-tiering')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800">Info Harga Tiering</h3>
+                <button onclick="closeModal('modal-tiering')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="mb-4">
+                <p id="tiering-title" class="text-sm font-medium text-gray-800 mb-1"></p>
+                <p class="text-xs text-gray-500">Harga menyesuaikan jumlah jamaah.</p>
+            </div>
+            <div class="bg-gray-50 rounded-lg border border-gray-100 overflow-hidden">
+                <table class="w-full text-sm text-left">
+                    <thead class="bg-gray-100 text-gray-600 text-xs uppercase">
+                        <tr>
+                            <th class="px-4 py-2">Jumlah Jamaah</th>
+                            <th class="px-4 py-2 text-right">Harga / Pax</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tiering-table-body" class="divide-y divide-gray-100">
+                        <!-- Content generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-6 text-right">
+                <button type="button" onclick="closeModal('modal-tiering')" class="px-4 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function openDetailModal(title, desc, price, packageId) {
+            document.getElementById('detail-title').textContent = title;
+            document.getElementById('detail-desc').textContent = desc;
+            document.getElementById('detail-price').textContent = price;
+            document.getElementById('detail-order-btn').href = 'handling-order.html?package=' + packageId;
+            
+            const modal = document.getElementById('modal-detail');
+            modal.classList.remove('hidden');
+        }
+
+        function openTieringModal(title, basePrice) {
+            document.getElementById('tiering-title').textContent = title;
+            const tbody = document.getElementById('tiering-table-body');
+            
+            // Dummy Tiering Data Logic based on basePrice
+            const tiers = [
+                { range: '1 - 19', price: basePrice + 50 },
+                { range: '20 - 40', price: basePrice },
+                { range: '41 - 60', price: basePrice - 20 },
+                { range: '> 60', price: basePrice - 40 },
+            ];
+
+            tbody.innerHTML = tiers.map(tier => `
+                <tr>
+                    <td class="px-4 py-2 text-gray-600">${tier.range}</td>
+                    <td class="px-4 py-2 text-right font-medium text-gold">$${tier.price}</td>
+                </tr>
+            `).join('');
+
+            const modal = document.getElementById('modal-tiering');
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

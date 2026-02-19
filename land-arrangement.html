@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Arrangement - Big Umroh CMS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#cb9032',
+                            50: '#fdf9f2',
+                            600: '#b07527',
+                        }
+                    },
+                    boxShadow: { 'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cb9032; }
+        .sidebar-menu-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+        .sidebar-menu-item:hover, .sidebar-menu-item.active { background: linear-gradient(90deg, #fdf9f2 0%, #ffffff 100%); color: #cb9032; border-left-color: #cb9032; }
+        .submenu-item.active { color: #cb9032; background-color: #fdf9f2; }
+        .submenu-item.active span { background-color: #cb9032; }
+        .modal-bg { background-color: rgba(0, 0, 0, 0.6); }
+        .category-filter-btn {
+            padding: 6px 16px;
+            border-radius: 0.5rem;
+            font-size: 0.875rem; /* 14px */
+            line-height: 1.25rem;
+            font-weight: 500;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background-color: white;
+            color: #4b5563; /* gray-600 */
+        }
+        .category-filter-btn:hover {
+            border-color: #cb9032;
+            color: #cb9032;
+        }
+        .category-filter-btn.active {
+            background-color: #cb9032;
+            color: white;
+            border-color: #cb9032;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-72 bg-white border-r border-gray-100 hidden md:flex flex-col z-20 shadow-soft">
+            <div class="h-20 flex items-center px-8 border-b border-gray-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center text-white shadow-lg shadow-gold/30">
+                        <i class="fas fa-kaaba text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800 leading-tight">Big Umroh</h1>
+                        <p class="text-[10px] text-gray-400 font-medium tracking-widest uppercase">CMS Core System</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto px-4 space-y-1 pb-4 pt-6">
+                <!-- Merchant Menu (Active State) -->
+                <div class="space-y-1">
+                    <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-store"></i>
+                            <span>Merchant</span>
+                        </div>
+                        <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
+                    </button>
+                    
+                    <div id="submenu-merchant" class="pl-11 pr-2 space-y-1">
+                        <a href="index.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Daftar Merchant
+                        </a>
+                        <a href="#" class="submenu-item active block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Land Arrangement
+                        </a>
+                        <!-- Handling Service Submenu -->
+                        <div class="relative">
+                            <button onclick="toggleSubSubmenu('handling')" class="submenu-item w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                                <div class="flex items-center gap-2">
+                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                                    <span>Handling Service</span>
+                                </div>
+                                <i id="arrow-handling" class="fas fa-chevron-right text-[8px] transition-transform duration-300"></i>
+                            </button>
+                            <div id="sub-submenu-handling" class="hidden pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
+                                <a href="handling-paket.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Paket</a>
+                                <a href="handling-custom.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Custom</a>
+                            </div>
+                        </div>
+                        <a href="ticketing.html" class="submenu-item block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            Ticketing
+                        </a>
+                        <!-- Other items can be linked similarly if needed -->
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-100">
+                <button class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-50 hover:bg-red-50 text-gray-600 hover:text-red-600 rounded-xl transition-colors text-sm font-medium">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-[#f9fafb]">
+            
+            <!-- HEADER -->
+            <header class="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+                <div class="flex items-center gap-6">
+                    <div class="hidden md:block">
+                        <h2 class="text-xl font-bold text-gray-800">Land Arrangement</h2>
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span>Merchant</span>
+                            <i class="fas fa-chevron-right text-[8px]"></i>
+                            <span class="text-gold">Land Arrangement</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="relative w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-500 hover:text-gold hover:border-gold hover:shadow-lg hover:shadow-gold/10 transition-all">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <main class="flex-1 overflow-y-auto p-8 scroll-smooth relative">
+                <!-- View: Product List -->
+                <div id="view-product-list">
+                    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Daftar Produk LA</h3>
+                            <div class="flex items-center gap-3 mt-2">
+                                <div class="bg-white border border-gray-200 rounded-lg p-1 flex text-xs font-medium shadow-sm">
+                                    <button onclick="changeCurrency('IDR')" class="currency-btn active px-3 py-1 rounded-md bg-gold text-white transition-all" data-currency="IDR">IDR</button>
+                                    <button onclick="changeCurrency('USD')" class="currency-btn px-3 py-1 rounded-md text-gray-500 hover:bg-gray-50 transition-all" data-currency="USD">USD</button>
+                                    <button onclick="changeCurrency('SAR')" class="currency-btn px-3 py-1 rounded-md text-gray-500 hover:bg-gray-50 transition-all" data-currency="SAR">SAR</button>
+                                </div>
+                                <span class="text-[10px] text-gray-400 italic"><i class="far fa-clock mr-1"></i>terakhir diupdate pada : 10/02/2026 pkl. 07.00</span>
+                            </div>
+                        </div>
+                        <button onclick="switchView('view-stock')" class="bg-white border border-gray-200 text-gray-600 hover:text-gold hover:border-gold px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm">
+                            <i class="fas fa-boxes"></i> Kelola Stok
+                        </button>
+                    </div>
+
+                    <!-- Filter -->
+                    <div class="mb-4 flex items-center gap-2 flex-wrap">
+                        <span class="text-sm font-medium text-gray-700 mr-2">Filter Kategori:</span>
+                        <button onclick="filterByCategory(this, 'all')" class="category-filter-btn active">Semua</button>
+                        <button onclick="filterByCategory(this, 'Visa')" class="category-filter-btn">Visa</button>
+                        <button onclick="filterByCategory(this, 'Hotel')" class="category-filter-btn">Hotel</button>
+                        <button onclick="filterByCategory(this, 'Penerbangan')" class="category-filter-btn">Penerbangan</button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">Produk</th>
+                                        <th class="p-4 font-semibold">Merchant</th>
+                                        <th class="p-4 font-semibold">Kategori</th>
+                                        <th class="p-4 font-semibold">Harga</th>
+                                        <th class="p-4 font-semibold">Stok</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="product-table-body" class="text-sm divide-y divide-gray-100">
+                                    <!-- Dummy 1: Visa -->
+                                    <tr class="product-row hover:bg-gray-50 transition-colors" data-category="Visa">
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                    <i class="fas fa-passport"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Visa Umroh</p>
+                                                    <p class="text-xs text-gray-500">Proses 3-5 Hari Kerja</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                        <td class="p-4 text-gray-600"><span class="bg-purple-50 text-purple-600 text-[10px] px-2 py-0.5 rounded-full border border-purple-100">Visa</span></td>
+                                        <td class="p-4 font-medium text-gold price-display" data-price-idr="2500000">Rp 2.500.000</td>
+                                        <td class="p-4 text-gray-600">150 Pax</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal({ name: 'Visa Umroh', merchant: 'Al-Hijaz Indowisata', category: 'Visa', price: '2500000', stock: '150 Pax', description: 'Layanan pengurusan visa umroh resmi dengan proses cepat dan terjamin. <br><b>Estimasi Proses:</b> 3-5 hari kerja. <br><b>Dokumen:</b> Paspor, Foto, dll.' })" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openLaOrderModal('Visa Umroh', '2500000')" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="la-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors">
+                                                <i class="fas fa-history"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Dummy 2: Hotel -->
+                                    <tr class="product-row hover:bg-gray-50 transition-colors" data-category="Hotel">
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                    <i class="fas fa-hotel"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Hotel Hilton Makkah</p>
+                                                    <p class="text-xs text-gray-500">5 Malam - Quad Room</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600">Barokah Travel</td>
+                                        <td class="p-4 text-gray-600"><span class="bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5 rounded-full border border-blue-100">Hotel</span></td>
+                                        <td class="p-4 font-medium text-gold price-display" data-price-idr="8500000">Rp 8.500.000</td>
+                                        <td class="p-4 text-gray-600">45 Kamar</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal({ name: 'Hotel Hilton Makkah', merchant: 'Barokah Travel', category: 'Hotel', price: '8500000', stock: '45 Kamar', description: 'Akomodasi di Hotel Hilton Makkah Convention. <br><b>Tipe Kamar:</b> Quad (4 orang). <br><b>Durasi:</b> 5 Malam. <br><b>Fasilitas:</b> Dekat dengan Masjidil Haram.' })" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openLaOrderModal('Hotel Hilton Makkah', '8500000')" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="la-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors">
+                                                <i class="fas fa-history"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <!-- Dummy 3: Penerbangan -->
+                                    <tr class="product-row hover:bg-gray-50 transition-colors" data-category="Penerbangan">
+                                        <td class="p-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
+                                                    <i class="fas fa-plane-departure"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="font-medium text-gray-800">Tiket Saudia Airlines</p>
+                                                    <p class="text-xs text-gray-500">CGK - JED (Direct)</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                        <td class="p-4 text-gray-600"><span class="bg-green-50 text-green-600 text-[10px] px-2 py-0.5 rounded-full border border-green-100">Penerbangan</span></td>
+                                        <td class="p-4 font-medium text-gold price-display" data-price-idr="15000000">Rp 15.000.000</td>
+                                        <td class="p-4 text-gray-600">30 Kursi</td>
+                                        <td class="p-4 text-right">
+                                            <button onclick="openDetailModal({ name: 'Tiket Saudia Airlines', merchant: 'Al-Hijaz Indowisata', category: 'Penerbangan', price: '15000000', stock: '30 Kursi', description: 'Tiket penerbangan langsung (direct) dari Jakarta (CGK) ke Jeddah (JED) dengan maskapai Saudia Airlines. <br><b>Kelas:</b> Ekonomi. <br><b>Bagasi:</b> 2x23kg.' })" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded transition-colors mr-1">Detail</button>
+                                            <button onclick="openLaOrderModal('Tiket Saudia Airlines', '15000000')" class="text-xs bg-gold hover:bg-gold-600 text-white px-3 py-1.5 rounded transition-colors mr-1">Order</button>
+                                            <a href="la-orderhistory.html" title="Riwayat Pesanan" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1.5 rounded transition-colors">
+                                                <i class="fas fa-history"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View: Stock Management (Hidden) -->
+                <div id="view-stock" class="hidden">
+                    <div class="mb-6 flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <button onclick="switchView('view-product-list')" class="text-gray-400 hover:text-gray-600 transition-colors">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h3 class="text-xl font-bold text-gray-800">Manajemen Stok</h3>
+                        </div>
+                        <button onclick="openModal('modal-add-stock')" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20">
+                            <i class="fas fa-plus"></i> Tambah Produk
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
+                                        <th class="p-4 font-semibold">Produk</th>
+                                        <th class="p-4 font-semibold">Merchant</th>
+                                        <th class="p-4 font-semibold">Kategori</th>
+                                        <th class="p-4 font-semibold">Harga</th>
+                                        <th class="p-4 font-semibold">Stok</th>
+                                        <th class="p-4 font-semibold text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-gray-100">
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="p-4 font-medium text-gray-800">Hotel Mekkah 5 Hari</td>
+                                        <td class="p-4 text-gray-600">Al-Hijaz Indowisata</td>
+                                        <td class="p-4 text-gray-600"><span class="bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5 rounded-full border border-blue-100">Hotel</span></td>
+                                        <td class="p-4 font-medium text-gold">Rp 8.500.000</td>
+                                        <td class="p-4 text-gray-600">45 Kamar</td>
+                                        <td class="p-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <button class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Stok -->
+    <div id="modal-add-stock" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-add-stock')"></div>
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Tambah Produk Baru</h3>
+                <button onclick="closeModal('modal-add-stock')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form onsubmit="event.preventDefault(); closeModal('modal-add-stock'); alert('Produk berhasil ditambahkan (dummy)!');">
+                <div class="space-y-4">
+                    <!-- Produk & Merchant -->
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Produk</label>
+                            <input type="text" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="Nama Produk Baru" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Merchant</label>
+                            <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                <option value="">Pilih Merchant...</option>
+                                <option value="1">Al-Hijaz Indowisata</option>
+                                <option value="2">Barokah Travel</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Kategori -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 mb-1">Kategori</label>
+                        <select id="stock-category" onchange="handleCategoryChange()" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                            <option value="">Pilih Kategori...</option>
+                            <option value="visa">Visa</option>
+                            <option value="hotel">Hotel</option>
+                            <option value="penerbangan">Penerbangan</option>
+                        </select>
+                    </div>
+
+                    <!-- Dynamic Fields: Hotel -->
+                    <div id="fields-hotel" class="hidden space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Kota</label>
+                            <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                <option value="makkah">Makkah</option>
+                                <option value="madinah">Madinah</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Pilih Hotel</label>
+                            <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                <option value="">Pilih Hotel...</option>
+                                <option value="hilton">Hilton Convention</option>
+                                <option value="pullman">Pullman Zamzam</option>
+                                <option value="mov">Movenpick</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Fields: Penerbangan -->
+                    <div id="fields-flight" class="hidden space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Rute</label>
+                            <div class="flex items-center gap-2">
+                                <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                    <option value="">Dari</option>
+                                    <option value="CGK">CGK (Jakarta)</option>
+                                    <option value="SUB">SUB (Surabaya)</option>
+                                    <option value="KNO">KNO (Medan)</option>
+                                    <option value="UPG">UPG (Makassar)</option>
+                                </select>
+                                <i class="fas fa-exchange-alt text-gray-400"></i>
+                                <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                    <option value="">Ke</option>
+                                    <option value="JED">JED (Jeddah)</option>
+                                    <option value="MED">MED (Madinah)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Maskapai</label>
+                            <select class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
+                                <option value="">Pilih Maskapai...</option>
+                                <option value="sv">Saudia Airlines</option>
+                                <option value="ga">Garuda Indonesia</option>
+                                <option value="ek">Emirates</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Harga -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-xs font-medium text-gray-700">Harga</label>
+                                <div class="flex gap-1">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="currency_input" value="IDR" class="peer sr-only" checked onchange="document.getElementById('input-currency-symbol').innerText = 'Rp'">
+                                        <span class="text-[10px] px-2 py-0.5 rounded border border-gray-200 text-gray-500 peer-checked:bg-gold peer-checked:text-white peer-checked:border-gold transition-all">IDR</span>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="currency_input" value="USD" class="peer sr-only" onchange="document.getElementById('input-currency-symbol').innerText = '$'">
+                                        <span class="text-[10px] px-2 py-0.5 rounded border border-gray-200 text-gray-500 peer-checked:bg-gold peer-checked:text-white peer-checked:border-gold transition-all">USD</span>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="currency_input" value="SAR" class="peer sr-only" onchange="document.getElementById('input-currency-symbol').innerText = 'SAR'">
+                                        <span class="text-[10px] px-2 py-0.5 rounded border border-gray-200 text-gray-500 peer-checked:bg-gold peer-checked:text-white peer-checked:border-gold transition-all">SAR</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <span id="input-currency-symbol" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rp</span>
+                                <input type="number" class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0">
+                            </div>
+                        </div>
+                        <!-- Stok -->
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Jumlah Stok</label>
+                            <input type="number" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 mt-8">
+                    <button type="button" onclick="closeModal('modal-add-stock')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                    <button type="submit" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Simpan Produk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Order Summary -->
+    <div id="modal-order" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-order')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-gray-800">Ringkasan Pesanan</h3>
+                <button onclick="closeModal('modal-order')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs text-gray-500">Nama Produk</p>
+                    <p id="summary-product-name" class="font-semibold text-gray-800"></p>
+                </div>
+                <div>
+                    <label for="order-quantity" class="block text-xs font-medium text-gray-700 mb-1">Jumlah</label>
+                    <input type="number" id="order-quantity" value="1" min="1" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm" oninput="updateLaSummaryTotal()">
+                </div>
+                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <span class="font-semibold text-gray-800">Total Harga</span>
+                    <span id="summary-total-price" class="text-xl font-bold text-gold"></span>
+                </div>
+                <span id="summary-product-price" class="hidden"></span>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-order')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Batal</button>
+                <button type="button" onclick="alert('Pesanan dikonfirmasi!'); closeModal('modal-order');" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Konfirmasi Pesanan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Product Detail -->
+    <div id="modal-detail" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onclick="closeModal('modal-detail')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800" id="detail-product-name">Detail Produk</h3>
+                <button onclick="closeModal('modal-detail')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="space-y-3 text-sm max-h-[60vh] overflow-y-auto pr-2">
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Merchant</p>
+                    <p id="detail-merchant" class="w-2/3 font-medium text-gray-800"></p>
+                </div>
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Kategori</p>
+                    <p id="detail-category" class="w-2/3 font-medium text-gray-800"></p>
+                </div>
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Harga</p>
+                    <p id="detail-price" class="w-2/3 font-medium text-gold"></p>
+                </div>
+                <div class="flex">
+                    <p class="w-1/3 text-gray-500">Stok</p>
+                    <p id="detail-stock" class="w-2/3 font-medium text-gray-800"></p>
+                </div>
+                <div class="pt-3 border-t border-gray-100 mt-3">
+                     <p class="text-gray-500 mb-2">Deskripsi</p>
+                     <div id="detail-description" class="text-gray-700 leading-relaxed"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-detail')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Tutup</button>
+                <button type="button" id="detail-order-btn" class="px-6 py-2 rounded-lg bg-gold hover:bg-gold-600 text-white text-sm font-medium transition-colors shadow-lg shadow-gold/20">Order Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebarSubmenu(id) {
+            const submenu = document.getElementById('submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function toggleSubSubmenu(id) {
+            const submenu = document.getElementById('sub-submenu-' + id);
+            const arrow = document.getElementById('arrow-' + id);
+            
+            if (submenu.classList.contains('hidden')) {
+                submenu.classList.remove('hidden');
+                arrow.classList.add('rotate-90');
+                arrow.classList.add('text-gold');
+            } else {
+                submenu.classList.add('hidden');
+                arrow.classList.remove('rotate-90');
+                arrow.classList.remove('text-gold');
+            }
+        }
+
+        function switchView(viewId) {
+            document.getElementById('view-product-list').classList.add('hidden');
+            document.getElementById('view-stock').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function handleCategoryChange() {
+            const category = document.getElementById('stock-category').value;
+            const hotelFields = document.getElementById('fields-hotel');
+            const flightFields = document.getElementById('fields-flight');
+
+            // Reset visibility
+            hotelFields.classList.add('hidden');
+            flightFields.classList.add('hidden');
+
+            // Show based on selection
+            if (category === 'hotel') {
+                hotelFields.classList.remove('hidden');
+            } else if (category === 'penerbangan') {
+                flightFields.classList.remove('hidden');
+            }
+        }
+
+        function openDetailModal(details) {
+            document.getElementById('detail-product-name').textContent = details.name;
+            document.getElementById('detail-merchant').textContent = details.merchant;
+            document.getElementById('detail-category').textContent = details.category;
+            document.getElementById('detail-stock').textContent = details.stock;
+            document.getElementById('detail-description').innerHTML = details.description; // Use innerHTML to allow for simple formatting like <br>
+
+            // Format price based on current currency
+            const activeCurrencyBtn = document.querySelector('.currency-btn.bg-gold');
+            const currency = activeCurrencyBtn ? activeCurrencyBtn.dataset.currency : 'IDR';
+            const priceIdr = parseFloat(details.price);
+            const converted = priceIdr * exchangeRates[currency];
+            const locale = currency === 'IDR' ? 'id-ID' : (currency === 'USD' ? 'en-US' : 'en-SA');
+            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            document.getElementById('detail-price').textContent = formatter.format(converted);
+
+            // Set up the order button inside the detail modal
+            const orderBtn = document.getElementById('detail-order-btn');
+            orderBtn.onclick = () => {
+                closeModal('modal-detail');
+                openLaOrderModal(details.name, details.price);
+            };
+
+            openModal('modal-detail');
+        }
+
+        function openLaOrderModal(productName, productPrice) {
+            document.getElementById('summary-product-name').textContent = productName;
+            document.getElementById('summary-product-price').textContent = productPrice;
+            document.getElementById('order-quantity').value = 1;
+            updateLaSummaryTotal();
+            openModal('modal-order');
+        }
+
+        function updateLaSummaryTotal() {
+            const quantity = parseInt(document.getElementById('order-quantity').value) || 0;
+            const priceIdr = parseInt(document.getElementById('summary-product-price').textContent) || 0;
+
+            const activeCurrencyBtn = document.querySelector('.currency-btn.bg-gold');
+            const currency = activeCurrencyBtn ? activeCurrencyBtn.dataset.currency : 'IDR';
+
+            const totalIdr = quantity * priceIdr;
+            const convertedTotal = totalIdr * (exchangeRates[currency] || 1);
+
+            const locale = currency === 'IDR' ? 'id-ID' : (currency === 'USD' ? 'en-US' : 'en-SA');
+            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            
+            document.getElementById('summary-total-price').textContent = formatter.format(convertedTotal);
+        }
+
+
+        // Currency Toggle Logic
+        const exchangeRates = {
+            'IDR': 1,
+            'USD': 0.000064, // Approx 1 USD = 15,625 IDR
+            'SAR': 0.00024   // Approx 1 SAR = 4,166 IDR
+        };
+
+        function changeCurrency(currency) {
+            // Update buttons style
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if(btn.dataset.currency === currency) {
+                    btn.classList.add('bg-gold', 'text-white');
+                    btn.classList.remove('text-gray-500', 'hover:bg-gray-50');
+                } else {
+                    btn.classList.remove('bg-gold', 'text-white');
+                    btn.classList.add('text-gray-500', 'hover:bg-gray-50');
+                }
+            });
+
+            // Update prices in table
+            document.querySelectorAll('.price-display').forEach(el => {
+                const priceIdr = parseFloat(el.dataset.priceIdr);
+                const converted = priceIdr * exchangeRates[currency];
+                
+                const locale = currency === 'IDR' ? 'id-ID' : (currency === 'USD' ? 'en-US' : 'en-SA');
+                const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+                
+                el.textContent = formatter.format(converted);
+            });
+        }
+
+        function filterByCategory(element, category) {
+            // Update button active state
+            document.querySelectorAll('.category-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // Filter table rows
+            document.querySelectorAll('#product-table-body .product-row').forEach(row => {
+                if (category === 'all' || row.dataset.category === category) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>     const convertedTotal = totalIdr * (exchangeRates[currency] || 1);
+
+            const locale = currency === 'IDR' ? 'id-ID' : (currency === 'USD' ? 'en-US' : 'en-SA');
+            const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            
+            document.getElementById('summary-total-price').textContent = formatter.format(convertedTotal);
+        }
+
+
+        // Currency Toggle Logic
+        const exchangeRates = {
+            'IDR': 1,
+            'USD': 0.000064, // Approx 1 USD = 15,625 IDR
+            'SAR': 0.00024   // Approx 1 SAR = 4,166 IDR
+        };
+
+        function changeCurrency(currency) {
+            // Update buttons style
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                if(btn.dataset.currency === currency) {
+                    btn.classList.add('bg-gold', 'text-white');
+                    btn.classList.remove('text-gray-500', 'hover:bg-gray-50');
+                } else {
+                    btn.classList.remove('bg-gold', 'text-white');
+                    btn.classList.add('text-gray-500', 'hover:bg-gray-50');
+                }
+            });
+
+            // Update prices in table
+            document.querySelectorAll('.price-display').forEach(el => {
+                const priceIdr = parseFloat(el.dataset.priceIdr);
+                const converted = priceIdr * exchangeRates[currency];
+                
+                const locale = currency === 'IDR' ? 'id-ID' : (currency === 'USD' ? 'en-US' : 'en-SA');
+                const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: currency, minimumFractionDigits: 0, maximumFractionDigits: 2 });
+                
+                el.textContent = formatter.format(converted);
+            });
+        }
+
+        function filterByCategory(element, category) {
+            // Update button active state
+            document.querySelectorAll('.category-filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            // Filter table rows
+            document.querySelectorAll('#product-table-body .product-row').forEach(row => {
+                if (category === 'all' || row.dataset.category === category) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
