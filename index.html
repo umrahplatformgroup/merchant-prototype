@@ -251,8 +251,8 @@
                         </button>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100">
-                        <div class="overflow-x-auto">
+                    <div class="bg-white rounded-xl shadow-soft overflow-hidden border border-gray-100" data-table-container>
+                        <div class="overflow-x-auto" data-table-wrapper>
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-100">
@@ -289,16 +289,30 @@
                                             <span class="bg-green-50 text-green-600 text-xs px-2 py-1 rounded-lg border border-green-100 font-medium">Aktif</span>
                                         </td>
                                         <td class="p-4 text-right">
-                                            <div class="flex items-center justify-end gap-2">
-                                                <button onclick="openAdminModal('Al-Hijaz Indowisata')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded transition-colors" title="Tambah Admin">
-                                                    <i class="fas fa-user-plus"></i>
+                                            <div class="relative inline-block text-left" data-action-dropdown>
+                                                <button type="button" onclick="toggleActionDropdown(this)" class="inline-flex justify-center w-full rounded-md border border-gray-200 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gold">
+                                                    <i class="fas fa-ellipsis-v"></i>
                                                 </button>
-                                                <button class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
+                                                    <div class="py-1" role="menu" aria-orientation="vertical">
+                                                        <a href="#" onclick="openAdminModal('Al-Hijaz Indowisata'); this.parentElement.parentElement.classList.add('hidden'); return false;" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-user-plus w-4 text-gray-400"></i>
+                                                            <span>Tambah Admin</span>
+                                                        </a>
+                                                        <a href="paymentgateway.html" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-credit-card w-4 text-gray-400"></i>
+                                                            <span>Tambah PG</span>
+                                                        </a>
+                                                        <a href="#" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-edit w-4 text-gray-400"></i>
+                                                            <span>Edit</span>
+                                                        </a>
+                                                        <a href="#" class="flex items-center gap-3 text-red-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-trash w-4 text-red-400"></i>
+                                                            <span>Hapus</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -325,16 +339,30 @@
                                             <span class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-lg border border-gray-200 font-medium">Non-Aktif</span>
                                         </td>
                                         <td class="p-4 text-right">
-                                            <div class="flex items-center justify-end gap-2">
-                                                <button onclick="openAdminModal('Barokah Perlengkapan')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-2 py-1 rounded transition-colors" title="Tambah Admin">
-                                                    <i class="fas fa-user-plus"></i>
+                                            <div class="relative inline-block text-left" data-action-dropdown>
+                                                <button type="button" onclick="toggleActionDropdown(this)" class="inline-flex justify-center w-full rounded-md border border-gray-200 shadow-sm px-2 py-1 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-gold">
+                                                    <i class="fas fa-ellipsis-v"></i>
                                                 </button>
-                                                <button class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-600 px-2 py-1 rounded transition-colors" title="Edit">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2 py-1 rounded transition-colors" title="Hapus">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-10">
+                                                    <div class="py-1" role="menu" aria-orientation="vertical">
+                                                        <a href="#" onclick="openAdminModal('Barokah Perlengkapan'); this.parentElement.parentElement.classList.add('hidden'); return false;" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-user-plus w-4 text-gray-400"></i>
+                                                            <span>Tambah Admin</span>
+                                                        </a>
+                                                        <a href="paymentgateway.html" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-credit-card w-4 text-gray-400"></i>
+                                                            <span>Tambah PG</span>
+                                                        </a>
+                                                        <a href="#" class="flex items-center gap-3 text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-edit w-4 text-gray-400"></i>
+                                                            <span>Edit</span>
+                                                        </a>
+                                                        <a href="#" class="flex items-center gap-3 text-red-600 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">
+                                                            <i class="fas fa-trash w-4 text-red-400"></i>
+                                                            <span>Hapus</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
@@ -679,6 +707,46 @@
             }
             if (link) link.classList.add('active');
         }
+
+        // --- Action Dropdown ---
+        function toggleActionDropdown(button) {
+            const dropdown = button.nextElementSibling; 
+            const wrapper = button.closest('[data-table-wrapper]');
+            const container = button.closest('[data-table-container]');
+
+            // Close all other dropdowns first
+            document.querySelectorAll('[data-action-dropdown] > div:last-child').forEach(d => {
+                if (d !== dropdown && !d.classList.contains('hidden')) {
+                    d.classList.add('hidden');
+                    const otherWrapper = d.closest('[data-table-wrapper]');
+                    const otherContainer = d.closest('[data-table-container]');
+                    if(otherWrapper) otherWrapper.classList.remove('overflow-visible');
+                    if(otherContainer) otherContainer.classList.remove('overflow-visible');
+                }
+            });
+
+            // Toggle the current one
+            const isVisible = !dropdown.classList.toggle('hidden');
+
+            // Toggle overflow class on the wrappers
+            if(wrapper) wrapper.classList.toggle('overflow-visible', isVisible);
+            if(container) container.classList.toggle('overflow-visible', isVisible);
+        }
+
+        // Close dropdowns if clicking outside
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('[data-action-dropdown]')) {
+                document.querySelectorAll('[data-action-dropdown] > div:last-child').forEach(d => {
+                    if(!d.classList.contains('hidden')) {
+                        d.classList.add('hidden');
+                        const wrapper = d.closest('[data-table-wrapper]');
+                        const container = d.closest('[data-table-container]');
+                        if(wrapper) wrapper.classList.remove('overflow-visible');
+                        if(container) container.classList.remove('overflow-visible');
+                    }
+                });
+            }
+        });
 
         // --- Admin Modal Functions ---
 
