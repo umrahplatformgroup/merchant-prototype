@@ -67,8 +67,8 @@
                 <div class="space-y-1">
                     <button onclick="toggleSidebarSubmenu('merchant')" class="w-full sidebar-menu-item active flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium text-gold group focus:outline-none" id="menu-merchant">
                         <div class="flex items-center gap-3">
-                            <i class="fas fa-store"></i>
-                            <span>Merchant</span>
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Market</span>
                         </div>
                         <i id="arrow-merchant" class="fas fa-chevron-right text-xs opacity-50 transition-transform duration-300 rotate-90 text-gold"></i>
                     </button>
@@ -114,19 +114,10 @@
                             </div>
                             <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Soon</span>
                         </a>
-                        <div class="relative">
-                            <button onclick="toggleSubSubmenu('vaccine')" class="submenu-item active w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
-                                <div class="flex items-center gap-2">
-                                    <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
-                                    <span>Vaccine</span>
-                                </div>
-                                <i id="arrow-vaccine" class="fas fa-chevron-right text-[8px] transition-transform duration-300 rotate-90 text-gold"></i>
-                            </button>
-                            <div id="sub-submenu-vaccine" class="pl-4 mt-1 space-y-1 border-l border-gray-100 ml-2">
-                                <a href="vaccine.html" class="block px-3 py-1.5 text-[10px] font-medium text-gold bg-gold-50 rounded-lg">Product List</a>
-                                <a href="vaccine-orderhistory.html" class="block px-3 py-1.5 text-[10px] font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg">Order List</a>
-                            </div>
-                        </div>
+                        <a href="vaccine.html" class="submenu-item active block px-3 py-2 text-xs font-medium text-gray-500 hover:text-gold hover:bg-gold-50 rounded-lg transition-colors relative group">
+                            <span class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1 bg-gray-300 rounded-full group-hover:bg-gold -ml-3 transition-colors"></span>
+                            <span>Vaccine</span>
+                        </a>
                     </div>
                 </div>
             </nav>
@@ -171,6 +162,9 @@
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                             <input type="text" placeholder="Cari vaksin..." class="w-full pl-9 pr-4 py-2 rounded-lg border border-gray-200 focus:border-gold focus:ring-1 focus:ring-gold outline-none transition-all text-sm">
                         </div>
+                        <a href="vaccine-orderhistory.html" class="bg-white border border-gray-200 text-gray-600 hover:text-gold hover:border-gold px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-sm whitespace-nowrap">
+                            <i class="fas fa-history"></i> Riwayat Order
+                        </a>
                         <button onclick="openAddModal()" class="bg-gold hover:bg-gold-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 shadow-lg shadow-gold/20 whitespace-nowrap">
                             <i class="fas fa-plus"></i> Tambah Paket
                         </button>

@@ -170,6 +170,14 @@
                                 </div>
                                 <div class="flex"><p class="w-2/5 text-gray-500">Jumlah Peserta</p><p id="detail-pax" class="w-3/5 font-medium text-gray-800"></p></div>
                                 <div class="flex"><p class="w-2/5 text-gray-500">Total Harga</p><p id="detail-total" class="w-3/5 font-bold text-gold"></p></div>
+                                <div class="flex"><p class="w-2/5 text-gray-500">Metode Pembayaran</p><p id="detail-payment-method" class="w-3/5 font-medium text-gray-800"></p></div>
+                                <div id="payment-proof-row" class="flex hidden"><p class="w-2/5 text-gray-500">Bukti Transfer</p>
+                                    <div class="w-3/5">
+                                        <button onclick="viewPaymentProof()" class="text-xs bg-gold/10 text-gold border border-gold/20 px-3 py-1 rounded-lg hover:bg-gold/20 transition-colors flex items-center gap-2">
+                                            <i class="fas fa-image"></i> Lihat Bukti
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="flex"><p class="w-2/5 text-gray-500">Alamat</p><p id="detail-address" class="w-3/5 font-medium text-gray-800"></p></div>
                                 <div class="flex"><p class="w-2/5 text-gray-500">Nama PIC</p><p id="detail-pic-name" class="w-3/5 font-medium text-gray-800"></p></div>
                                 <div class="flex"><p class="w-2/5 text-gray-500">No. WA PIC</p><p id="detail-pic-wa" class="w-3/5 font-medium text-gray-800"></p></div>
@@ -290,6 +298,23 @@
         </div>
     </div>
 
+    <!-- Modal Payment Proof -->
+    <div id="modal-payment-proof" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 modal-bg backdrop-blur-sm transition-opacity" onclick="closeModal('modal-payment-proof')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl bg-white rounded-2xl shadow-2xl transform transition-all p-6">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
+                <h3 class="text-lg font-bold text-gray-800">Bukti Transfer</h3>
+                <button onclick="closeModal('modal-payment-proof')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="max-h-[70vh] overflow-y-auto flex justify-center items-center">
+                <img id="payment-proof-image" src="" alt="Bukti Transfer" class="max-w-full h-auto rounded-lg shadow-md">
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <button type="button" onclick="closeModal('modal-payment-proof')" class="px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm font-medium transition-colors">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const allOrders = {
             'VC-20260215-001': {
@@ -302,6 +327,8 @@
                 schedule: '25 Feb 2026, 09:00',
                 pax: 5,
                 total: 'Rp 1.750.000',
+                paymentMethod: 'Bank BSI (VA)',
+                hasProof: false,
                 address: 'Jl. Gatot Subroto No. 12, Jakarta Selatan',
                 picName: 'Staff Nusa Travel',
                 picWa: '0812-1111-2233',
@@ -323,6 +350,8 @@
                 schedule: '22 Feb 2026, 14:00',
                 pax: 2,
                 total: 'Rp 700.000',
+                paymentMethod: 'Bank BCA Baba Ali',
+                hasProof: true,
                 address: 'Jl. Sudirman Kav. 5, Bandung',
                 picName: 'Staff Amanah Tour',
                 picWa: '0819-3333-4455',
@@ -348,6 +377,12 @@
                 document.getElementById('detail-schedule').textContent = orderData.schedule;
                 document.getElementById('detail-pax').textContent = orderData.pax + ' Peserta';
                 document.getElementById('detail-total').textContent = orderData.total;
+                document.getElementById('detail-payment-method').textContent = orderData.paymentMethod || '-';
+                
+                if (orderData.hasProof) {
+                    document.getElementById('payment-proof-row').classList.remove('hidden');
+                }
+
                 document.getElementById('detail-address').textContent = orderData.address;
                 document.getElementById('detail-pic-name').textContent = orderData.picName;
                 document.getElementById('detail-pic-wa').textContent = orderData.picWa;
@@ -448,6 +483,22 @@
             alert('Jadwal berhasil diperbarui!');
         }
 
+        function viewPaymentProof() {
+            const proofImageUrl = 'https://via.placeholder.com/600x800.png?text=Dummy+Bukti+Transfer+BCA'; // Dummy image URL
+            document.getElementById('payment-proof-image').src = proofImageUrl;
+            openModal('modal-payment-proof');
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('hidden');
+        }
+
         function openEditPilgrimModal(index) {
             // In a real app, you would fetch the specific pilgrim data from the array using the index
             // For now, we'll just grab the data from the table row or use dummy data logic
@@ -504,40 +555,6 @@
 
             document.getElementById('vaccine-detail-pilgrim-index').value = index;
             document.getElementById('modal-vaccine-detail').classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        function toggleSidebarSubmenu(id) {
-            const submenu = document.getElementById('submenu-' + id);
-            const arrow = document.getElementById('arrow-' + id);
-            
-            if (submenu.classList.contains('hidden')) {
-                submenu.classList.remove('hidden');
-                arrow.classList.add('rotate-90');
-                arrow.classList.add('text-gold');
-            } else {
-                submenu.classList.add('hidden');
-                arrow.classList.remove('rotate-90');
-                arrow.classList.remove('text-gold');
-            }
-        }
-
-        function toggleSubSubmenu(id) {
-            const submenu = document.getElementById('sub-submenu-' + id);
-            const arrow = document.getElementById('arrow-' + id);
-            
-            if (submenu.classList.contains('hidden')) {
-                submenu.classList.remove('hidden');
-                arrow.classList.add('rotate-90');
-                arrow.classList.add('text-gold');
-            } else {
-                submenu.classList.add('hidden');
-                arrow.classList.remove('rotate-90');
-                arrow.classList.remove('text-gold');
-            }
         }
     </script>
 </body>
